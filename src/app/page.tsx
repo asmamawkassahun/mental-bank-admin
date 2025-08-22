@@ -9,9 +9,13 @@ import { AccountDeletionRequests } from "@/components/dashboard/account-deletion
 import { ReportsAnalytics } from "@/components/reports-analytics"
 import { FeedbackInterface } from "@/components/feedback-interface"
 import { SettingsInterface } from "@/components/settings-interface"
+import { UsersInterface } from "@/components/users-interface"
+import { NotificationsInterface } from "@/components/notifications-interface"
 
 export default function AdminDashboard() {
-  const [currentPage, setCurrentPage] = useState<"dashboard" | "reports" | "feedback" | "settings">("dashboard")
+  const [currentPage, setCurrentPage] = useState<
+    "dashboard" | "reports" | "feedback" | "settings" | "users" | "notifications"
+  >("dashboard")
 
   return (
     <SidebarWrapper currentPage={currentPage} onPageChange={setCurrentPage}>
@@ -28,8 +32,12 @@ export default function AdminDashboard() {
         <ReportsAnalytics />
       ) : currentPage === "feedback" ? (
         <FeedbackInterface />
-      ) : (
+      ) : currentPage === "settings" ? (
         <SettingsInterface />
+      ) : currentPage === "users" ? (
+        <UsersInterface />
+      ) : (
+        <NotificationsInterface />
       )}
     </SidebarWrapper>
   )

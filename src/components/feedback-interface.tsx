@@ -4,7 +4,12 @@ import { useState, useEffect } from "react"
 import { Button } from "@/components/ui/button"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Badge } from "@/components/ui/badge"
-import { Calendar, Filter, Download, Settings, Plus, DownloadIcon, Trash2, ChevronDown, CircleQuestionMark } from "lucide-react"
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog"
+import { Input } from "@/components/ui/input"
+import { Textarea } from "@/components/ui/textarea"
+import { Label } from "@/components/ui/label"
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
+import { Calendar, Filter, Download, Settings, Plus, DownloadIcon, Trash2, ChevronDown, X, CircleQuestionMark } from "lucide-react"
 import { PieChart, Pie, Cell, ResponsiveContainer } from "recharts"
 
 interface KnowledgeBaseArticle {
@@ -42,15 +47,34 @@ export function FeedbackInterface() {
   })
   const [currentPage, setCurrentPage] = useState(1)
   const [totalFeedbacks, setTotalFeedbacks] = useState(124)
-  const [sortBy, setSortBy] = useState("Recent")
+  const [timeframeFilter, setTimeframeFilter] = useState("Recent")
+  const [isModalOpen, setIsModalOpen] = useState(false)
+  const [formData, setFormData] = useState({
+    title: "",
+    body: "",
+  })
+  const [formErrors, setFormErrors] = useState<{ title?: string; body?: string }>({})
+  const [isSubmitting, setIsSubmitting] = useState(false)
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false)
+  const [articleToDelete, setArticleToDelete] = useState<KnowledgeBaseArticle | null>(null)
+  const [isDeleting, setIsDeleting] = useState(false)
+
+  const feedbacksPerPage = 4
+  const totalPages = Math.ceil(totalFeedbacks / feedbacksPerPage)
+  const startIndex = (currentPage - 1) * feedbacksPerPage + 1
+  const endIndex = Math.min(currentPage * feedbacksPerPage, totalFeedbacks)
+
+  const timeframeOptions = [
+    { value: "Recent", label: "Recent" },
+    { value: "This Week", label: "This Week" },
+    { value: "This Month", label: "This Month" },
+  ]
 
   useEffect(() => {
-    // Fetch knowledge base data
     fetch("/api/feedback/knowledge-base")
       .then((res) => res.json())
       .then((data) => setKnowledgeBase(data))
       .catch(() => {
-        // Fallback data
         setKnowledgeBase([
           { id: "1", title: "How to process returns", views: 1245, lastUpdated: "2 days ago" },
           { id: "2", title: "Payment processing troubleshooting", views: 987, lastUpdated: "1 week ago" },
@@ -59,40 +83,114 @@ export function FeedbackInterface() {
         ])
       })
 
-    // Fetch user feedbacks
-    fetch("/api/feedback/user-feedback")
+    fetchUserFeedbacks()
+  }, [currentPage, timeframeFilter])
+
+  const fetchUserFeedbacks = () => {
+    fetch(`/api/feedback/user-feedback?page=${currentPage}&limit=${feedbacksPerPage}&timeframe=${timeframeFilter}`)
       .then((res) => res.json())
       .then((data) => {
         setUserFeedbacks(data.feedbacks)
         setTotalFeedbacks(data.total)
       })
       .catch(() => {
-        // Fallback data
-        setUserFeedbacks([
+        const allFeedbacks = [
           {
             id: "1",
             user: { name: "Emma Wilson", avatar: "/placeholder.svg?height=40&width=40", feedbackId: "F-1234" },
             content:
               "I've been trying to process a payment for my order #45677 for the last 30 minutes but keep getting an error message. This is very frustrating as I need these items urgently. Your payment system seems to be having issues today.",
-            timestamp: "2 hours ago",
+            timestamp:
+              timeframeFilter === "Recent"
+                ? "2 hours ago"
+                : timeframeFilter === "This Week"
+                  ? "3 days ago"
+                  : "2 weeks ago",
           },
           {
             id: "2",
             user: { name: "Alex Johnson", avatar: "/placeholder.svg?height=40&width=40", feedbackId: "F-1233" },
             content:
               "I followed the password reset instructions but still can't access my account. I've tried multiple browsers and devices but nothing works. I need to place an order today and this is preventing me from doing so. Can someone please help me regain access?",
-            timestamp: "5 hours ago",
+            timestamp:
+              timeframeFilter === "Recent"
+                ? "5 hours ago"
+                : timeframeFilter === "This Week"
+                  ? "5 days ago"
+                  : "3 weeks ago",
           },
           {
             id: "3",
             user: { name: "James Peterson", avatar: "/placeholder.svg?height=40&width=40", feedbackId: "F-1232" },
             content:
               "I received my order #45672 today but one item is missing. I paid for 3 items but only received 2. This isn't the first time this has happened with my orders. Please resolve this issue as soon as possible.",
-            timestamp: "1 day ago",
+            timestamp:
+              timeframeFilter === "Recent"
+                ? "1 day ago"
+                : timeframeFilter === "This Week"
+                  ? "6 days ago"
+                  : "1 month ago",
           },
-        ])
+          {
+            id: "4",
+            user: { name: "Sarah Miller", avatar: "/placeholder.svg?height=40&width=40", feedbackId: "F-1231" },
+            content:
+              "The new app update is fantastic! The interface is much cleaner and easier to navigate. I especially love the new meditation tracking feature. Keep up the great work!",
+            timestamp:
+              timeframeFilter === "Recent"
+                ? "2 days ago"
+                : timeframeFilter === "This Week"
+                  ? "1 week ago"
+                  : "1 month ago",
+          },
+          {
+            id: "5",
+            user: { name: "Michael Chen", avatar: "/placeholder.svg?height=40&width=40", feedbackId: "F-1230" },
+            content:
+              "I'm having trouble syncing my data across devices. My progress on mobile doesn't show up on desktop and vice versa. This is quite inconvenient as I use both regularly.",
+            timestamp:
+              timeframeFilter === "Recent"
+                ? "3 days ago"
+                : timeframeFilter === "This Week"
+                  ? "1 week ago"
+                  : "1 month ago",
+          },
+        ]
+
+        let filteredFeedbacks = allFeedbacks
+        if (timeframeFilter === "This Week") {
+          filteredFeedbacks = allFeedbacks.slice(0, 4)
+        } else if (timeframeFilter === "This Month") {
+          filteredFeedbacks = allFeedbacks
+        }
+
+        const startIdx = (currentPage - 1) * feedbacksPerPage
+        const endIdx = startIdx + feedbacksPerPage
+        setUserFeedbacks(filteredFeedbacks.slice(startIdx, endIdx))
+        setTotalFeedbacks(filteredFeedbacks.length)
       })
-  }, [])
+  }
+
+  const handleTimeframeChange = (newTimeframe: string) => {
+    setTimeframeFilter(newTimeframe)
+    setCurrentPage(1)
+  }
+
+  const handlePreviousPage = () => {
+    if (currentPage > 1) {
+      setCurrentPage(currentPage - 1)
+    }
+  }
+
+  const handleNextPage = () => {
+    if (currentPage < totalPages) {
+      setCurrentPage(currentPage + 1)
+    }
+  }
+
+  const handlePageClick = (page: number) => {
+    setCurrentPage(page)
+  }
 
   const pieData = [
     { name: "Positive", value: feedbackAnalysis.positive, color: "#10b981" },
@@ -100,9 +198,106 @@ export function FeedbackInterface() {
     { name: "Negative", value: feedbackAnalysis.negative, color: "#ef4444" },
   ]
 
+  const validateForm = () => {
+    const errors: { title?: string; body?: string } = {}
+
+    if (!formData.title.trim()) {
+      errors.title = "Question title is required"
+    } else if (formData.title.trim().length < 5) {
+      errors.title = "Question title must be at least 5 characters"
+    }
+
+    if (!formData.body.trim()) {
+      errors.body = "Question body is required"
+    } else if (formData.body.trim().length < 10) {
+      errors.body = "Question body must be at least 10 characters"
+    }
+
+    setFormErrors(errors)
+    return Object.keys(errors).length === 0
+  }
+
+  const handleSubmit = async (action: "draft" | "send" | "schedule") => {
+    if (!validateForm()) return
+
+    setIsSubmitting(true)
+
+    try {
+      const response = await fetch("/api/feedback/questions", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          ...formData,
+          action,
+          timestamp: new Date().toISOString(),
+        }),
+      })
+
+      if (response.ok) {
+        setFormData({ title: "", body: "" })
+        setFormErrors({})
+        setIsModalOpen(false)
+
+        fetch("/api/feedback/knowledge-base")
+          .then((res) => res.json())
+          .then((data) => setKnowledgeBase(data))
+          .catch(() => {})
+      } else {
+        throw new Error("Failed to submit question")
+      }
+    } catch (error) {
+      console.error("Error submitting question:", error)
+    } finally {
+      setIsSubmitting(false)
+    }
+  }
+
+  const handleInputChange = (field: "title" | "body", value: string) => {
+    setFormData((prev) => ({ ...prev, [field]: value }))
+    if (formErrors[field]) {
+      setFormErrors((prev) => ({ ...prev, [field]: undefined }))
+    }
+  }
+
+  const handleDeleteClick = (article: KnowledgeBaseArticle) => {
+    setArticleToDelete(article)
+    setIsDeleteModalOpen(true)
+  }
+
+  const handleConfirmDelete = async () => {
+    if (!articleToDelete) return
+
+    setIsDeleting(true)
+
+    try {
+      const response = await fetch(`/api/feedback/knowledge-base/${articleToDelete.id}`, {
+        method: "DELETE",
+      })
+
+      if (response.ok) {
+        setKnowledgeBase((prev) => prev.filter((article) => article.id !== articleToDelete.id))
+        setIsDeleteModalOpen(false)
+        setArticleToDelete(null)
+      } else {
+        throw new Error("Failed to delete article")
+      }
+    } catch (error) {
+      console.error("Error deleting article:", error)
+      // You could add a toast notification here for error feedback
+    } finally {
+      setIsDeleting(false)
+    }
+  }
+
+  const handleCancelDelete = () => {
+    setIsDeleteModalOpen(false)
+    setArticleToDelete(null)
+  }
+
   return (
     <div className="flex-1 flex flex-col">
-      {/* Header */}
       <div className="bg-white border-b border-gray-200 px-6 py-4">
         <div className="flex items-center justify-between">
           <div>
@@ -131,20 +326,19 @@ export function FeedbackInterface() {
       </div>
 
       <main className="flex-1 p-6 space-y-6">
-        {/* Knowledge Base Section */}
         <div className="bg-white rounded-lg shadow-[0_4px_6px_-1px_rgba(0,0,0,0.1)] border-none p-6">
           <div className="flex items-center justify-between mb-6">
             <div>
               <h2 className="text-lg font-semibold text-gray-900">Knowledge Base</h2>
               <p className="text-sm text-gray-600">Frequently accessed help articles</p>
             </div>
-            <Button size="sm" className="bg-white text-black border border-gray-200 hover:bg-gray-50">
+            <Button size="sm" onClick={() => setIsModalOpen(true)}>
               <Plus className="w-4 h-4 mr-2" />
               New Article
             </Button>
           </div>
 
-          <div className="overflow-hidden border border-gray-200 rounded-lg">
+          <div className="overflow-hidden">
             <table className="w-full">
               <thead>
                 <tr className="border-b border-gray-200">
@@ -159,7 +353,7 @@ export function FeedbackInterface() {
                   <tr key={article.id} className="border-b border-gray-100 hover:bg-gray-50">
                     <td className="py-4 px-4">
                       <div className="flex items-center gap-2">
-                        <CircleQuestionMark className="text-[#3B82F6] w-5 h-5 "/>
+                        <CircleQuestionMark className="text-[#3B82F6] w-5 h-5 " />
                         <span className="">{article.title}</span>
                       </div>
                     </td>
@@ -170,7 +364,7 @@ export function FeedbackInterface() {
                         <Button variant="ghost" size="sm">
                           <DownloadIcon className="w-4 h-4" />
                         </Button>
-                        <Button variant="ghost" size="sm">
+                        <Button variant="ghost" size="sm" onClick={() => handleDeleteClick(article)}>
                           <Trash2 className="w-4 h-4 text-red-500" />
                         </Button>
                       </div>
@@ -183,7 +377,6 @@ export function FeedbackInterface() {
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-          {/* User Feedback Section */}
           <div className="lg:col-span-2 bg-white rounded-lg shadow-[0_4px_6px_-1px_rgba(0,0,0,0.1)] border-none p-6">
             <div className="flex items-center justify-between mb-6">
               <div className="flex items-center gap-4">
@@ -194,10 +387,25 @@ export function FeedbackInterface() {
               </div>
               <div className="flex items-center gap-2">
                 <span className="text-sm text-gray-600">Sort by:</span>
-                <Button variant="outline" size="sm">
-                  {sortBy}
-                  <ChevronDown className="w-4 h-4 ml-2" />
-                </Button>
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <Button variant="outline" size="sm">
+                      {timeframeFilter}
+                      <ChevronDown className="w-4 h-4 ml-2" />
+                    </Button>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent align="end">
+                    {timeframeOptions.map((option) => (
+                      <DropdownMenuItem
+                        key={option.value}
+                        onClick={() => handleTimeframeChange(option.value)}
+                        className={timeframeFilter === option.value ? "bg-blue-50 text-blue-600" : ""}
+                      >
+                        {option.label}
+                      </DropdownMenuItem>
+                    ))}
+                  </DropdownMenuContent>
+                </DropdownMenu>
               </div>
             </div>
 
@@ -229,30 +437,42 @@ export function FeedbackInterface() {
               ))}
             </div>
 
-            {/* Pagination */}
             <div className="flex items-center justify-between mt-6 pt-4 border-t border-gray-200">
-              <p className="text-sm text-gray-600">Showing 4 of {totalFeedbacks} feedbacks</p>
+              <p className="text-sm text-gray-600">
+                Showing {startIndex} to {endIndex} of {totalFeedbacks} feedbacks
+              </p>
               <div className="flex items-center gap-2">
-                <Button variant="outline" size="sm" disabled>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={handlePreviousPage}
+                  disabled={currentPage === 1 || totalFeedbacks <= 4}
+                >
                   Previous
                 </Button>
-                <Button variant="outline" size="sm" className="bg-blue-50 text-blue-600 border-blue-200">
-                  1
-                </Button>
-                <Button variant="outline" size="sm">
-                  2
-                </Button>
-                <Button variant="outline" size="sm">
-                  3
-                </Button>
-                <Button variant="outline" size="sm">
+                {Array.from({ length: Math.min(3, totalPages) }, (_, i) => i + 1).map((page) => (
+                  <Button
+                    key={page}
+                    variant="outline"
+                    size="sm"
+                    onClick={() => handlePageClick(page)}
+                    className={currentPage === page ? "bg-blue-50 text-blue-600 border-blue-200" : ""}
+                  >
+                    {page}
+                  </Button>
+                ))}
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={handleNextPage}
+                  disabled={currentPage === totalPages || totalFeedbacks <= 4}
+                >
                   Next
                 </Button>
               </div>
             </div>
           </div>
 
-          {/* Feedback Analysis Section */}
           <div className="bg-white rounded-lg shadow-[0_4px_6px_-1px_rgba(0,0,0,0.1)] border-none p-6">
             <div className="flex items-center justify-between mb-6">
               <div>
@@ -307,6 +527,94 @@ export function FeedbackInterface() {
           </div>
         </div>
       </main>
+
+      <Dialog open={isModalOpen} onOpenChange={setIsModalOpen}>
+        <DialogContent className="sm:max-w-[500px]">
+          <DialogHeader>
+            <DialogTitle>Add Question</DialogTitle>
+            <DialogDescription>Create a question that could guide the user</DialogDescription>
+          </DialogHeader>
+
+          <div className="space-y-4 py-4">
+            <div className="space-y-2">
+              <Label htmlFor="title">Question Title</Label>
+              <Input
+                id="title"
+                placeholder="Enter question title"
+                value={formData.title}
+                onChange={(e) => handleInputChange("title", e.target.value)}
+                className={formErrors.title ? "border-red-500" : ""}
+              />
+              {formErrors.title && <p className="text-sm text-red-500">{formErrors.title}</p>}
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="body">Question Body</Label>
+              <Textarea
+                id="body"
+                placeholder="Type your message here..."
+                value={formData.body}
+                onChange={(e) => handleInputChange("body", e.target.value)}
+                className={`min-h-[120px] ${formErrors.body ? "border-red-500" : ""}`}
+              />
+              {formErrors.body && <p className="text-sm text-red-500">{formErrors.body}</p>}
+            </div>
+          </div>
+
+          <div className="flex justify-end gap-3">
+            <Button variant="outline" onClick={() => handleSubmit("draft")} disabled={isSubmitting}>
+              Save as Draft
+            </Button>
+            <Button variant="outline" onClick={() => handleSubmit("send")} disabled={isSubmitting}>
+              Send Now
+            </Button>
+            <Button
+              onClick={() => handleSubmit("schedule")}
+              disabled={isSubmitting}
+              className="bg-black text-white hover:bg-gray-800"
+            >
+              {isSubmitting ? "Submitting..." : "Schedule"}
+            </Button>
+          </div>
+        </DialogContent>
+      </Dialog>
+
+      <Dialog open={isDeleteModalOpen} onOpenChange={setIsDeleteModalOpen}>
+        <DialogContent className="sm:max-w-[400px]">
+          <DialogHeader className="relative">
+            {/* <Button
+              variant="ghost"
+              size="sm"
+              className="absolute right-0 top-0 h-6 w-6 p-0"
+              onClick={handleCancelDelete}
+            >
+              <X className="h-4 w-4" />
+            </Button> */}
+            <DialogTitle className="text-center text-lg font-semibold">
+              Do you want to delete this question ?
+            </DialogTitle>
+            <DialogDescription className="text-center text-gray-600">This action is permanent</DialogDescription>
+          </DialogHeader>
+
+          <div className="flex justify-center gap-3 pt-4">
+            <Button
+              variant="outline"
+              onClick={handleCancelDelete}
+              disabled={isDeleting}
+              className="px-8 bg-transparent"
+            >
+              Cancel
+            </Button>
+            <Button
+              onClick={handleConfirmDelete}
+              disabled={isDeleting}
+              className="bg-black text-white hover:bg-gray-800 px-8"
+            >
+              {isDeleting ? "Deleting..." : "Delete"}
+            </Button>
+          </div>
+        </DialogContent>
+      </Dialog>
     </div>
   )
 }
