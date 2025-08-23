@@ -27,7 +27,7 @@ export function AppUsageTiming({ data }: AppUsageTimingProps) {
             <CardHeader className="flex flex-row items-center justify-between">
                 <div>
                     <CardTitle className="text-lg font-semibold">App Usage Timing</CardTitle>
-                    <p className="text-sm text-gray-600">When users are most active in the app</p>
+                    <p className="text-sm text-foreground/60">When users are most active in the app</p>
                 </div>
                 <div className="flex items-center gap-4">
 
@@ -39,7 +39,7 @@ export function AppUsageTiming({ data }: AppUsageTimingProps) {
             </CardHeader>
             <div className=" ml-6">
                 <div className="flex items-center gap-2 text-sm">
-                    <span className="text-gray-600">View usage data by:</span>
+                    <span className="text-foreground/60">View usage data by:</span>
                     <Badge variant="outline" className="text-teal-600 border-teal-200">
                         ↗ Morning
                     </Badge>
@@ -58,7 +58,7 @@ export function AppUsageTiming({ data }: AppUsageTimingProps) {
                                 <span className="font-medium text-4">Morning Users (5AM - 12PM)</span>
                             </div>
                             <div className="text-[1.5rem] font-bold mb-1">{data.morning.count.toLocaleString()}</div>
-                            <div className="text-sm text-gray-600 mb-6">{data.morning.percentage}% of total users</div>
+                            <div className="text-sm text-foreground/60 mb-6">{data.morning.percentage}% of total users</div>
                             </div>
 
                             <div>
@@ -67,14 +67,14 @@ export function AppUsageTiming({ data }: AppUsageTimingProps) {
                                     <span className="font-medium">Evening Users (5PM - 12AM)</span>
                                 </div>
                                 <div className="text-[1.5rem] font-bold mb-1">{data.evening.count.toLocaleString()}</div>
-                                <div className="text-sm text-gray-600">{data.evening.percentage}% of total users</div>
+                                <div className="text-sm text-foreground/60">{data.evening.percentage}% of total users</div>
                             </div>
                         </div>
 
                         <div className="space-y-3 my-auto ">
                             {data.morning.ageBreakdown.map((item) => (
                                 <div key={item.age} className="flex items-center gap-3">
-                                    <span className="text-sm text-gray-600 w-12">{item.age}</span>
+                                    <span className="text-sm text-foreground/60 w-12">{item.age}</span>
                                     <div className="flex-1 flex">
                                         <div
                                             className="h-6 bg-teal-500 rounded-l-xl "

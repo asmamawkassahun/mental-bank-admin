@@ -58,12 +58,12 @@ export function UserAgeDistribution() {
     <Card className="border-none shadow-[0_4px_6px_-1px_rgba(0,0,0,0.1)]">
       <CardHeader>
         <CardTitle className="text-lg font-semibold">User Age Distribution</CardTitle>
-        <p className="text-sm text-gray-600">Breakdown of user age demograph</p>
+        <p className="text-sm text-foreground/60">Breakdown of user age demograph</p>
       </CardHeader>
       <CardContent>
         <div className="h-64 relative">
           {loading ? (
-            <div className="flex items-center justify-center h-full text-gray-500">Loading age distribution...</div>
+            <div className="flex items-center justify-center h-full text-foreground/60">Loading age distribution...</div>
           ) : ageData && ageData.length > 0 ? (
             <ResponsiveContainer width="100%" height="100%">
               <PieChart>
@@ -84,7 +84,7 @@ export function UserAgeDistribution() {
               </PieChart>
             </ResponsiveContainer>
           ) : (
-            <div className="flex items-center justify-center h-full text-gray-500">
+            <div className="flex items-center justify-center h-full text-foreground/60">
               No age distribution data available
             </div>
           )}
@@ -97,7 +97,7 @@ export function UserAgeDistribution() {
           className="w-3 h-3 rounded-full"
           style={{ backgroundColor: getAgeColor(item.ageGroup) }}
         />
-        <span className="text-xs text-gray-600">{item.range}</span>
+        <span className="text-xs text-foreground/60">{item.range}</span>
       </div>
     ))}
   </div>
@@ -107,7 +107,7 @@ export function UserAgeDistribution() {
           {ageData.slice(0, 3).map((ageGroup) => (
             <div key={ageGroup.ageGroup} className="text-center">
               <div className="text-lg font-semibold">{ageGroup.percentage}%</div>
-              <div className="text-xs text-gray-500">{ageGroup.range}</div>
+              <div className="text-xs text-foreground/60">{ageGroup.range}</div>
             </div>
           ))}
         </div>

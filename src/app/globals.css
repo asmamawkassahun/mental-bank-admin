@@ -119,3 +119,12 @@
   }
 }
 
+/* Utility classes */
+.text-foreground {
+  color: #000000;
+}
+.bg-background {
+  background-color: #ffffff;
+}
+
+

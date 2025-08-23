@@ -89,7 +89,7 @@ export function AppSidebar({ currentPage, onPageChange }: AppSidebarProps) {
             {/* <span className="text-white font-semibold text-sm">M</span> */}
           </div>
           <div className="leading-tight">
-            <h1 className="font-extrabold text-[1.25rem] text-gray-900 group-data-[collapsible=icon]:hidden">
+            <h1 className="font-extrabold text-[1.25rem] text-foreground group-data-[collapsible=icon]:hidden">
               Mental Bank
             </h1>
             <p className=" font-medium text-[0.625rem] group-data-[collapsible=icon]:hidden ">Prosperous you! </p>
@@ -170,7 +170,7 @@ export function AppSidebar({ currentPage, onPageChange }: AppSidebarProps) {
             </AvatarFallback>
           </Avatar>
           <div className="flex-1 min-w-0 group-data-[collapsible=icon]:hidden">
-            <div className="text-sm font-medium text-gray-900">{isLoading ? "Loading..." : adminData.name}</div>
+            <div className="text-sm font-medium text-foreground">{isLoading ? "Loading..." : adminData.name}</div>
             <div className="text-xs text-gray-500 truncate">{isLoading ? "Loading..." : adminData.email}</div>
           </div>
         </div>

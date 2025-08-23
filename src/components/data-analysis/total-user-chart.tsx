@@ -27,7 +27,7 @@ export function TotalUserChart({ data, loading = false, onTimeFrameChange }: Tot
             <CardHeader className="flex flex-row items-center justify-between">
                 <div>
                     <CardTitle className="text-lg font-semibold">Total User</CardTitle>
-                    <p className="text-sm text-gray-600">User consistency over time</p>
+                    <p className="text-sm text-foreground/60">User consistency over time</p>
                 </div>
 
                 <div className="flex items-center gap-2">
@@ -57,7 +57,7 @@ export function TotalUserChart({ data, loading = false, onTimeFrameChange }: Tot
             {/* CardContent fills the width and allows responsive height */}
             <CardContent className="w-full flex-1 min-h-[300px]">
                 {loading ? (
-                    <div className="flex items-center justify-center h-full text-gray-600">Loading...</div>
+                    <div className="flex items-center justify-center h-full text-foreground/60">Loading...</div>
                 ) : data && data.length > 0 ? (
                     <ResponsiveContainer width="100%" height="100%">
                         <AreaChart data={data} margin={{ top: 20, right: 20, bottom: 20, left: 0 }}>
@@ -83,7 +83,7 @@ export function TotalUserChart({ data, loading = false, onTimeFrameChange }: Tot
                         </AreaChart>
                     </ResponsiveContainer>
                 ) : (
-                    <div className="flex items-center justify-center h-full text-gray-500">No chart data available</div>
+                    <div className="flex items-center justify-center h-full text-foreground/60">No chart data available</div>
                 )}
             </CardContent>
         </Card>

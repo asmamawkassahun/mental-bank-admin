@@ -298,11 +298,11 @@ export function FeedbackInterface() {
 
   return (
     <div className="flex-1 flex flex-col">
-      <div className="bg-white border-b border-gray-200 px-6 py-4">
+      <div className="bg-background border-b border-gray-200 px-6 py-4">
         <div className="flex items-center justify-between">
           <div>
-            <h1 className="text-2xl font-semibold text-gray-900">Feedbacks</h1>
-            <p className="text-sm text-gray-600 mt-1">Monitor user mental health trends and journal ac</p>
+            <h1 className="text-2xl font-semibold text-foreground">Feedbacks</h1>
+            <p className="text-sm text-foreground/60 mt-1">Monitor user mental health trends and journal ac</p>
           </div>
           <div className="flex items-center gap-3">
             <Button variant="outline" size="sm">
@@ -326,11 +326,11 @@ export function FeedbackInterface() {
       </div>
 
       <main className="flex-1 p-6 space-y-6">
-        <div className="bg-white rounded-lg shadow-[0_4px_6px_-1px_rgba(0,0,0,0.1)] border-none p-6">
+        <div className="bg-background rounded-lg shadow-[0_4px_6px_-1px_rgba(0,0,0,0.1)] border-none p-6">
           <div className="flex items-center justify-between mb-6">
             <div>
-              <h2 className="text-lg font-semibold text-gray-900">Knowledge Base</h2>
-              <p className="text-sm text-gray-600">Frequently accessed help articles</p>
+              <h2 className="text-lg font-semibold text-foreground">Popular Questions</h2>
+              <p className="text-sm text-foreground/60">Frequently accessed help articles</p>
             </div>
             <Button size="sm" onClick={() => setIsModalOpen(true)}>
               <Plus className="w-4 h-4 mr-2" />
@@ -342,10 +342,10 @@ export function FeedbackInterface() {
             <table className="w-full">
               <thead>
                 <tr className="border-b border-gray-200">
-                  <th className="text-left py-3 px-4 font-medium text-gray-700">Title</th>
-                  <th className="text-left py-3 px-4 font-medium text-gray-700">Views</th>
-                  <th className="text-left py-3 px-4 font-medium text-gray-700">Last Updated</th>
-                  <th className="text-left py-3 px-4 font-medium text-gray-700">Actions</th>
+                  <th className="text-left py-3 px-4 font-medium text-foreground/60">Title</th>
+                  <th className="text-left py-3 px-4 font-medium text-foreground/60">Views</th>
+                  <th className="text-left py-3 px-4 font-medium text-foreground/60">Last Updated</th>
+                  <th className="text-left py-3 px-4 font-medium text-foreground/60">Actions</th>
                 </tr>
               </thead>
               <tbody>
@@ -357,8 +357,8 @@ export function FeedbackInterface() {
                         <span className="">{article.title}</span>
                       </div>
                     </td>
-                    <td className="py-4 px-4 text-gray-900">{article.views.toLocaleString()}</td>
-                    <td className="py-4 px-4 text-gray-600">{article.lastUpdated}</td>
+                    <td className="py-4 px-4 text-foreground">{article.views.toLocaleString()}</td>
+                    <td className="py-4 px-4 text-foreground">{article.lastUpdated}</td>
                     <td className="py-4 px-4">
                       <div className="flex items-center gap-2">
                         <Button variant="ghost" size="sm">
@@ -377,16 +377,16 @@ export function FeedbackInterface() {
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-          <div className="lg:col-span-2 bg-white rounded-lg shadow-[0_4px_6px_-1px_rgba(0,0,0,0.1)] border-none p-6">
+          <div className="lg:col-span-2 bg-background rounded-lg shadow-[0_4px_6px_-1px_rgba(0,0,0,0.1)] border-none p-6">
             <div className="flex items-center justify-between mb-6">
               <div className="flex items-center gap-4">
-                <h2 className="text-lg font-semibold text-gray-900">User Feedback</h2>
+                <h2 className="text-lg font-semibold text-foreground">User Feedback</h2>
                 <Badge variant="secondary" className="bg-blue-100 text-blue-800">
                   {totalFeedbacks} total
                 </Badge>
               </div>
               <div className="flex items-center gap-2">
-                <span className="text-sm text-gray-600">Sort by:</span>
+                <span className="text-sm text-foreground/60">Sort by:</span>
                 <DropdownMenu>
                   <DropdownMenuTrigger asChild>
                     <Button variant="outline" size="sm">
@@ -425,12 +425,12 @@ export function FeedbackInterface() {
                     <div className="flex-1">
                       <div className="flex items-center justify-between mb-2">
                         <div>
-                          <h4 className="font-medium text-gray-900">{feedback.user.name}</h4>
-                          <p className="text-sm text-gray-500">Feedback #{feedback.user.feedbackId}</p>
+                          <h4 className="font-medium text-foreground">{feedback.user.name}</h4>
+                          <p className="text-sm text-foreground/60">Feedback #{feedback.user.feedbackId}</p>
                         </div>
-                        <span className="text-sm text-gray-500">{feedback.timestamp}</span>
+                        <span className="text-sm text-foreground/60">{feedback.timestamp}</span>
                       </div>
-                      <p className="text-gray-700 text-sm leading-relaxed">{feedback.content}</p>
+                      <p className="text-foreground text-sm leading-relaxed">{feedback.content}</p>
                     </div>
                   </div>
                 </div>
@@ -438,8 +438,8 @@ export function FeedbackInterface() {
             </div>
 
             <div className="flex items-center justify-between mt-6 pt-4 border-t border-gray-200">
-              <p className="text-sm text-gray-600">
-                Showing {startIndex} to {endIndex} of {totalFeedbacks} feedbacks
+              <p className="text-sm text-foreground/60">
+                Showing  <span className="text-foreground"> {endIndex} </span> of <span className="text-foreground">{totalFeedbacks}</span> feedbacks
               </p>
               <div className="flex items-center gap-2">
                 <Button
@@ -456,7 +456,7 @@ export function FeedbackInterface() {
                     variant="outline"
                     size="sm"
                     onClick={() => handlePageClick(page)}
-                    className={currentPage === page ? "bg-blue-50 text-blue-600 border-blue-200" : ""}
+                    className={currentPage === page ? "bg-gray-100 text-foreground" : ""}
                   >
                     {page}
                   </Button>
@@ -473,11 +473,11 @@ export function FeedbackInterface() {
             </div>
           </div>
 
-          <div className="bg-white rounded-lg shadow-[0_4px_6px_-1px_rgba(0,0,0,0.1)] border-none p-6">
+          <div className="bg-background rounded-lg shadow-[0_4px_6px_-1px_rgba(0,0,0,0.1)] border-none p-6">
             <div className="flex items-center justify-between mb-6">
               <div>
-                <h2 className="text-lg font-semibold text-gray-900">Feedback Analysis</h2>
-                <p className="text-sm text-gray-600">Customer feedback sentiment overview</p>
+                <h2 className="text-lg font-semibold text-foreground">Feedback Analysis</h2>
+                <p className="text-sm text-foreground/60">Customer feedback sentiment overview</p>
               </div>
             </div>
 
@@ -505,23 +505,23 @@ export function FeedbackInterface() {
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-2">
                   <div className="w-3 h-3 bg-green-500 rounded-full"></div>
-                  <span className="text-sm font-medium text-gray-900">Positive</span>
+                  <span className="text-sm font-medium text-foreground">Positive</span>
                 </div>
-                <span className="text-sm font-semibold text-gray-900">{feedbackAnalysis.positive}%</span>
+                <span className="text-sm font-semibold text-foreground">{feedbackAnalysis.positive}%</span>
               </div>
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-2">
                   <div className="w-3 h-3 bg-gray-500 rounded-full"></div>
-                  <span className="text-sm font-medium text-gray-900">Neutral</span>
+                  <span className="text-sm font-medium text-foreground">Neutral</span>
                 </div>
-                <span className="text-sm font-semibold text-gray-900">{feedbackAnalysis.neutral}%</span>
+                <span className="text-sm font-semibold text-foreground">{feedbackAnalysis.neutral}%</span>
               </div>
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-2">
                   <div className="w-3 h-3 bg-red-500 rounded-full"></div>
-                  <span className="text-sm font-medium text-gray-900">Negative</span>
+                  <span className="text-sm font-medium text-foreground">Negative</span>
                 </div>
-                <span className="text-sm font-semibold text-gray-900">{feedbackAnalysis.negative}%</span>
+                <span className="text-sm font-semibold text-foreground">{feedbackAnalysis.negative}%</span>
               </div>
             </div>
           </div>
@@ -593,7 +593,7 @@ export function FeedbackInterface() {
             <DialogTitle className="text-center text-lg font-semibold">
               Do you want to delete this question ?
             </DialogTitle>
-            <DialogDescription className="text-center text-gray-600">This action is permanent</DialogDescription>
+            <DialogDescription className="text-center text-foreground/60">This action is permanent</DialogDescription>
           </DialogHeader>
 
           <div className="flex justify-center gap-3 pt-4">

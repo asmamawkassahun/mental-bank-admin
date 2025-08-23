@@ -72,7 +72,7 @@ export function MetricsCards() {
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
       {cards.map((card) => (
-        <Card key={card.title} className="bg-white">
+        <Card key={card.title} className="bg-background">
           <CardContent className="px-6">
             <div className="flex items-center justify-between mb-4">
               <div className="p-2 bg-[#6B77E126] rounded-lg">
@@ -80,7 +80,7 @@ export function MetricsCards() {
               </div>
               <div
                 className={`flex items-center gap-1 text-4 font-medium ${
-                  card.positive ? "text-[#059669]" : "text-red-600"
+                  card.positive ? "text-foreground/60" : "text-red-600"
                 }`}
               >
                 {card.positive ? <TrendingUp className="w-4 h-4" /> : <TrendingDown className="w-4 h-4" />}
@@ -89,9 +89,9 @@ export function MetricsCards() {
             </div>
 
             <div className="space-y-1">
-              <p className="text-4 font-medium text-[#71717A]">{card.title}</p>
-              <p className="text-2xl font-bold text-[#09090B]">{card.value}</p>
-              <p className="text-4 text-gray-500">{card.changeText}</p>
+              <p className="text-4 font-medium text-foreground/60">{card.title}</p>
+              <p className="text-2xl font-bold text-foreground">{card.value}</p>
+              <p className="text-4 text-foreground/60">{card.changeText}</p>
             </div>
           </CardContent>
         </Card>

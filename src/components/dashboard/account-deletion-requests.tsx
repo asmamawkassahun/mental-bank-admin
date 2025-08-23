@@ -53,7 +53,7 @@ export function AccountDeletionRequests() {
                   <AvatarFallback>EJ</AvatarFallback>
                 </Avatar>
                 <div className="flex-1">
-                  <div className="font-medium text-gray-900">{request.userName}</div>
+                  <div className="font-medium text-foreground">{request.userName}</div>
                   <div className="text-sm text-red-600">{request.status}</div>
                 </div>
                 <div className="text-sm text-gray-500">{request.timestamp}</div>

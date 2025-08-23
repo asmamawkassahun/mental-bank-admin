@@ -7,6 +7,7 @@ import { Label } from "@/components/ui/label"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Search, Laptop, Smartphone, Monitor } from "lucide-react"
+import { Separator } from "./ui/separator"
 
 interface LoginActivity {
   device: string
@@ -69,8 +70,8 @@ export function SettingsInterface() {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-semibold text-gray-900">Settings</h1>
-          <p className="text-sm text-gray-600 mt-1">Manage your account settings and preferences</p>
+          <h1 className="text-2xl font-semibold text-foreground">Settings</h1>
+          <p className="text-sm text-foreground/60 mt-1">Manage your account settings and preferences</p>
         </div>
         <div className="relative">
           <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
@@ -98,7 +99,7 @@ export function SettingsInterface() {
               </Avatar>
               <div className="space-y-1">
                 <h3 className="font-medium">John Smith</h3>
-                <p className="text-sm text-gray-600">john.smith@example.com</p>
+                <p className="text-sm text-foreground/60">john.smith@example.com</p>
                 <div className="flex space-x-2">
                   <Button variant="outline" size="sm">
                     Change Photo
@@ -126,6 +127,7 @@ export function SettingsInterface() {
                   id="firstName"
                   value={formData.firstName}
                   onChange={(e) => handleInputChange("firstName", e.target.value)}
+                  className="max-w-md"
                 />
               </div>
               <div className="space-y-2">
@@ -134,6 +136,7 @@ export function SettingsInterface() {
                   id="lastName"
                   value={formData.lastName}
                   onChange={(e) => handleInputChange("lastName", e.target.value)}
+                  className="max-w-md"
                 />
               </div>
             </div>
@@ -144,86 +147,97 @@ export function SettingsInterface() {
                 type="email"
                 value={formData.email}
                 onChange={(e) => handleInputChange("email", e.target.value)}
+                className="max-w-md"
               />
             </div>
           </CardContent>
         </Card>
 
         {/* Security Settings */}
-        <Card>
-          <CardHeader>
-            <CardTitle>Security Settings</CardTitle>
-            <CardDescription>Manage your password and account security preferences</CardDescription>
-          </CardHeader>
-          <CardContent className="space-y-4">
-            <div className="space-y-2">
-              <Label htmlFor="currentPassword">Current Password</Label>
-              <Input
-                id="currentPassword"
-                type="password"
-                placeholder="••••••••••"
-                value={formData.currentPassword}
-                onChange={(e) => handleInputChange("currentPassword", e.target.value)}
-              />
-            </div>
-            <div className="grid grid-cols-2 gap-4">
+        <Card className="space-y-6">
+          {/* Security Settings */}
+          <div className="p-0 border-0 shadow-none">
+            <CardHeader>
+              <CardTitle>Security Settings</CardTitle>
+              <CardDescription>Manage your password and account security preferences</CardDescription>
+            </CardHeader>
+
+            <CardContent className="space-y-4 mt-6">
               <div className="space-y-2">
-                <Label htmlFor="newPassword">New Password</Label>
+                <Label htmlFor="currentPassword">Current Password</Label>
                 <Input
-                  id="newPassword"
+                  id="currentPassword"
                   type="password"
                   placeholder="••••••••••"
-                  value={formData.newPassword}
-                  onChange={(e) => handleInputChange("newPassword", e.target.value)}
+                  value={formData.currentPassword}
+                  onChange={(e) => handleInputChange("currentPassword", e.target.value)}
+                  className="max-w-md"
                 />
               </div>
-              <div className="space-y-2">
-                <Label htmlFor="confirmPassword">Confirm New Password</Label>
-                <Input
-                  id="confirmPassword"
-                  type="password"
-                  placeholder="••••••••••"
-                  value={formData.confirmPassword}
-                  onChange={(e) => handleInputChange("confirmPassword", e.target.value)}
-                />
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-
-        {/* Two-Factor Authentication */}
-        <Card>
-          <CardHeader>
-            <CardTitle>Two-Factor Authentication</CardTitle>
-            <CardDescription>Add an extra layer of security to your account</CardDescription>
-          </CardHeader>
-          <CardContent>
-            <Button variant="outline">Enable Two-Factor Authentication</Button>
-          </CardContent>
-        </Card>
-
-        {/* Recent Login Activity */}
-        <Card>
-          <CardHeader>
-            <CardTitle>Recent Login Activity</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="space-y-3">
-              {loginActivity.map((activity, index) => (
-                <div key={index} className="flex items-center space-x-3 p-2 rounded-lg hover:bg-gray-50">
-                  <div className="p-2 bg-gray-100 rounded-lg">{getDeviceIcon(activity.icon)}</div>
-                  <div className="flex-1">
-                    <p className="font-medium text-sm">{activity.device}</p>
-                    <p className="text-xs text-gray-600">{activity.location}</p>
-                  </div>
+              <div className="grid grid-cols-2 gap-4 mt-6">
+                <div className="space-y-2">
+                  <Label htmlFor="newPassword">New Password</Label>
+                  <Input
+                    id="newPassword"
+                    type="password"
+                    placeholder="••••••••••"
+                    value={formData.newPassword}
+                    onChange={(e) => handleInputChange("newPassword", e.target.value)}
+                    className="max-w-md"
+                  />
                 </div>
-              ))}
-              <Button variant="link" className="p-0 h-auto text-sm">
-                View All Activity
-              </Button>
-            </div>
-          </CardContent>
+                <div className="space-y-2">
+                  <Label htmlFor="confirmPassword">Confirm New Password</Label>
+                  <Input
+                    id="confirmPassword"
+                    type="password"
+                    placeholder="••••••••••"
+                    value={formData.confirmPassword}
+                    onChange={(e) => handleInputChange("confirmPassword", e.target.value)}
+                    className="max-w-md"
+                  />
+                </div>
+              </div>
+            </CardContent>
+          </div>
+          <Separator className="m-none" />
+
+          {/* Two-Factor Authentication */}
+          <div className="p-0 border-0 shadow-none">
+            <CardHeader>
+              <CardTitle>Two-Factor Authentication</CardTitle>
+              <CardDescription>Add an extra layer of security to your account</CardDescription>
+            </CardHeader>
+            <CardContent>
+              <Button variant="outline">Enable Two-Factor Authentication</Button>
+            </CardContent>
+          </div>
+
+          <Separator />
+          {/* Recent Login Activity */}
+          <div className="p-0 border-0 shadow-none">
+            <CardHeader>
+              <CardTitle>Recent Login Activity</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-3">
+                {loginActivity.map((activity, index) => (
+                  <div key={index} className="flex items-center space-x-3 p-2 rounded-lg hover:bg-gray-50">
+                    <div className="p-2 bg-gray-100 rounded-lg">{getDeviceIcon(activity.icon)}</div>
+                    <div className="flex-1">
+                      <p className="font-medium text-sm">{activity.device}</p>
+                      <p className="text-xs text-foreground/60">{activity.location}</p>
+                    </div>
+                  </div>
+                ))}
+                <Button variant="link" className="p-0 h-auto text-sm">
+                  View All Activity
+                </Button>
+              </div>
+            </CardContent>
+          </div>
         </Card>
+
 
         {/* Action Buttons */}
         <div className="flex justify-end space-x-3 pt-4">

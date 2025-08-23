@@ -195,7 +195,7 @@ export function UsersInterface() {
                                         <span className="font-medium">{user.name}</span>
                                     </div>
                                 </TableCell>
-                                <TableCell className="text-gray-600">{user.email}</TableCell>
+                                <TableCell className="text-foreground/60">{user.email}</TableCell>
                                 <TableCell>
                                     <Badge variant={getRoleBadgeVariant(user.role)} className={user.role === "Premium User" ? "bg-[#DBEAFE] text-[#1E40AF]" : user.role !== "Admin" ? "bg-[#F3F4F6] border-none" : ""}>{user.role}</Badge>
                                 </TableCell>
@@ -207,7 +207,7 @@ export function UsersInterface() {
                                         <span className={getStatusColor(user.status)}>{user.status}</span>
                                     </div>
                                 </TableCell>
-                                <TableCell className="text-gray-600">{user.lastActive}</TableCell>
+                                <TableCell className="text-foreground/60">{user.lastActive}</TableCell>
                                 <TableCell>
                                     <DropdownMenu>
                                         <DropdownMenuTrigger asChild>
@@ -231,7 +231,7 @@ export function UsersInterface() {
 
             {/* Pagination */}
             <div className="flex items-center justify-between">
-                <div className="text-sm text-gray-600">
+                <div className="text-sm foreground/60">
                     Showing {startIndex} to {endIndex} of {safeData.total} users
                 </div>
                 {showPagination && (
@@ -261,7 +261,7 @@ export function UsersInterface() {
                             )
                         })}
 
-                        {safeData.totalPages > 3 && <span className="text-gray-400 px-2">...</span>}
+                        {safeData.totalPages > 3 && <span className="foreground/60 px-2">...</span>}
 
                         <Button
                             variant="outline"

@@ -96,22 +96,22 @@ export function UserTrendsChart() {
         </div>
 
         <div className="flex items-center justify-between mt-4 pt-4">
-          <div className="text-sm text-gray-600">
+          <div className="text-sm text-foreground/60">
             {data.stats.periodLabel}:{" "}
-            <span className="font-medium text-gray-900">{data.stats.newUsers.toLocaleString()} new users</span>
+            <span className="font-medium text-foreground">{data.stats.newUsers.toLocaleString()} new users</span>
           </div>
           <div className="flex items-center gap-6 text-sm">
             <div className="flex items-center gap-2">
               <div className="w-3 h-3 bg-blue-500 rounded-full"></div>
-              <span className="text-gray-600">New Users</span>
+              <span className="text-foreground/60">New Users</span>
             </div>
             <div className="flex items-center gap-2">
               <div className="w-3 h-3 bg-green-500 rounded-full"></div>
-              <span className="text-gray-600">Active Users</span>
+              <span className="text-foreground/60">Active Users</span>
             </div>
-            <div className="text-gray-600">
+            <div className="text-foreground/60">
               Active users:{" "}
-              <span className="font-medium text-gray-900">
+              <span className="font-medium text-foreground">
                 {data.stats.activeUsers.toLocaleString()} (+{data.stats.activeUsersChange}%)
               </span>
             </div>

@@ -99,11 +99,11 @@ export function ReportsAnalytics() {
   return (
     <div className="flex-1 flex flex-col">
       {/* Header */}
-      <div className="bg-white border-b border-gray-200 px-6 py-4">
+      <div className="bg-background border-b border-gray-200 px-6 py-4">
         <div className="flex items-center justify-between">
           <div>
-            <h1 className="text-2xl font-bold text-gray-900">Report & Analytics</h1>
-            <p className="text-sm text-gray-600 mt-1">Monitor user mental health trends and journal ac</p>
+            <h1 className="text-2xl font-bold text-foreground">Report & Analytics</h1>
+            <p className="text-sm text-foreground/60 mt-1">Monitor user mental health trends and journal ac</p>
           </div>
           <div className="flex items-center gap-3">
             <Button variant="outline" size="sm">

@@ -67,9 +67,9 @@ export function NotificationsInterface() {
       case "Alert":
         return "bg-orange-100 text-orange-800 hover:bg-orange-200"
       case "Info":
-        return "bg-gray-100 text-gray-800 hover:bg-gray-200"
+        return "bg-gray-100 text-foreground hover:bg-gray-200"
       default:
-        return "bg-gray-100 text-gray-800 hover:bg-gray-200"
+        return "bg-gray-100 text-foreground hover:bg-gray-200"
     }
   }
 
@@ -80,9 +80,9 @@ export function NotificationsInterface() {
       case "Scheduled":
         return "bg-blue-100 text-blue-800 hover:bg-blue-200"
       case "Draft":
-        return "bg-gray-100 text-gray-800 hover:bg-gray-200"
+        return "bg-gray-100 text-foreground hover:bg-gray-200"
       default:
-        return "bg-gray-100 text-gray-800 hover:bg-gray-200"
+        return "bg-gray-100 text-foreground hover:bg-gray-200"
     }
   }
 
@@ -164,6 +164,12 @@ export function NotificationsInterface() {
     totalPages: 1,
   }
 
+  const isSendDisabled =
+    !notificationForm.title.trim() ||
+    !notificationForm.message.trim() ||
+    !notificationForm.type; // you can also add !notificationForm.scheduleDate if required
+
+
   const isPaginationActive = safeData.total > 6
 
   return (
@@ -171,7 +177,7 @@ export function NotificationsInterface() {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-semibold text-gray-900">Notifications</h1>
+          <h1 className="text-2xl font-semibold text-foreground">Notifications</h1>
         </div>
         <div className="flex items-center gap-3">
           <Button variant="outline" size="sm" onClick={() => setIsModalOpen(true)}>
@@ -179,21 +185,21 @@ export function NotificationsInterface() {
             New Notification
           </Button>
           <div className="relative">
-            <Bell className="h-5 w-5 text-gray-500" />
+            <Bell className="h-5 w-5 text-foreground/60" />
             <span className="absolute -top-1 -right-1 h-4 w-4 bg-red-500 text-white text-xs rounded-full flex items-center justify-center">
               3
             </span>
           </div>
           <div className="h-8 w-8 rounded-full bg-gray-300 flex items-center justify-center">
-            <span className="text-sm font-medium text-gray-700">A</span>
+            <span className="text-sm font-medium text-foreground/60">A</span>
           </div>
         </div>
       </div>
 
       {/* Notification Management Section */}
       <div className="text-center py-8">
-        <h2 className="text-xl font-semibold text-gray-900 mb-2">Notification Management</h2>
-        <p className="text-gray-600">Manage your notification templates and delivery settings</p>
+        <h2 className="text-xl font-semibold text-foreground mb-2">Notification Management</h2>
+        <p className="text-foreground/60">Manage your notification templates and delivery settings</p>
       </div>
 
       {/* Notifications Table */}
@@ -202,7 +208,7 @@ export function NotificationsInterface() {
           <div className="flex items-center justify-between">
             <div>
               <CardTitle className="text-lg font-semibold">Notifications</CardTitle>
-              <p className="text-sm text-gray-600 mt-1">Manage all your notification templates</p>
+              <p className="text-sm text-foreground/60 mt-1">Manage all your notification templates</p>
             </div>
             <div className="flex items-center gap-3">
               <Button variant="outline" size="sm">
@@ -249,8 +255,8 @@ export function NotificationsInterface() {
                       <TableCell>
                         <Badge className={getTypeColor(notification.type)}>{notification.type}</Badge>
                       </TableCell>
-                      <TableCell className="text-gray-600">{notification.audience}</TableCell>
-                      <TableCell className="text-gray-600">{notification.scheduledDate}</TableCell>
+                      <TableCell className="text-foreground/60">{notification.audience}</TableCell>
+                      <TableCell className="text-foreground/60">{notification.scheduledDate}</TableCell>
                       <TableCell>
                         <Badge className={getStatusColor(notification.status)}>{notification.status}</Badge>
                       </TableCell>
@@ -272,7 +278,7 @@ export function NotificationsInterface() {
 
             {/* Pagination */}
             <div className="flex items-center justify-between">
-              <p className="text-sm text-gray-600">
+              <p className="text-sm text-foreground/60">
                 Showing {Math.min((currentPage - 1) * 6 + 1, safeData.total)} to{" "}
                 {Math.min(currentPage * 6, safeData.total)} of {safeData.total} notifications
               </p>
@@ -306,13 +312,13 @@ export function NotificationsInterface() {
         <DialogContent className="max-w-2xl">
           <DialogHeader>
             <DialogTitle className="text-xl font-semibold">New Notification</DialogTitle>
-            <p className="text-gray-600">Create a notification to send to your Mental Bank users</p>
+            <p className="text-foreground/60 text-sm">Create a notification to send to your Mental Bank users</p>
           </DialogHeader>
 
           <div className="space-y-6 py-4">
             {/* Notification Title */}
             <div className="space-y-2">
-              <label className="text-sm font-medium text-gray-700">Notification Title</label>
+              <label className="text-sm font-medium text-foreground/80">Notification Title</label>
               <Input
                 placeholder="Enter notification title"
                 value={notificationForm.title}
@@ -322,7 +328,7 @@ export function NotificationsInterface() {
 
             {/* Message Body */}
             <div className="space-y-2">
-              <label className="text-sm font-medium text-gray-700">Message Body</label>
+              <label className="text-sm font-medium text-foreground/80">Message Body</label>
               <Textarea
                 placeholder="Type your message here..."
                 rows={4}
@@ -331,36 +337,43 @@ export function NotificationsInterface() {
               />
             </div>
 
-            <div className="grid grid-cols-2 gap-6">
+            <div className="grid grid-cols-2 gap-6 ">
               {/* Notification Type */}
               <div className="space-y-3">
-                <label className="text-sm font-medium text-gray-700">Notification Type</label>
-                <div className="flex gap-2">
+                <label className="text-sm font-medium text-foreground/80">Notification Type</label>
+                <div className="flex gap-2 flex-wrap">
                   <Button
                     type="button"
-                    variant={notificationForm.type === "Reminder" ? "default" : "outline"}
                     size="sm"
                     onClick={() => handleFormChange("type", "Reminder")}
-                    className="flex items-center gap-2"
+                    className={`flex flex-col items-center justify-center gap-2 p-8 border
+    ${notificationForm.type === "Reminder"
+                        ? "bg-[#EBF5FF] text-foreground border-[#7C9CBF] hover:bg-[#EBF5FF]"
+                        : "bg-background text-foreground hover:bg-black/5"
+                      }`}
                   >
-                    <Bell className="h-4 w-4" />
-                    Reminder
+                    🔔
+                    <p>Reminder</p>
                   </Button>
+
+
                   <Button
                     type="button"
-                    variant={notificationForm.type === "Upgrade" ? "default" : "outline"}
                     size="sm"
                     onClick={() => handleFormChange("type", "Upgrade")}
-                    className="flex items-center gap-2"
+                    className={`flex flex-col items-center justify-center gap-2 p-8 border ${notificationForm.type === "Upgrade" ? "bg-[#EBF5FF] text-foreground border-[#7C9CBF] hover:bg-[#EBF5FF]" : "bg-background text-foreground"
+                      }`}
                   >
-                    ✨ Upgrade
+                    ✨
+                    <p>Upgrade</p>
                   </Button>
                 </div>
+
               </div>
 
               {/* Schedule Time */}
               <div className="space-y-2">
-                <label className="text-sm font-medium text-gray-700">Schedule Time</label>
+                <label className="text-sm font-medium text-foreground/80">Schedule Time</label>
                 <div className="relative">
                   <Input
                     type="date"
@@ -368,14 +381,14 @@ export function NotificationsInterface() {
                     onChange={(e) => handleFormChange("scheduleDate", e.target.value)}
                     className="pl-10"
                   />
-                  <Calendar className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
+                  <Calendar className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-foreground/60" />
                 </div>
               </div>
             </div>
 
             {/* Audience Targeting */}
             <div className="space-y-3">
-              <label className="text-sm font-medium text-gray-700">Audience Targeting</label>
+              <label className="text-sm font-medium text-foreground/80">Audience Targeting</label>
               <div className="flex gap-6">
                 <div className="flex items-center space-x-2">
                   <Checkbox
@@ -383,7 +396,7 @@ export function NotificationsInterface() {
                     checked={notificationForm.audience.allUsers}
                     onCheckedChange={(checked) => handleFormChange("audience.allUsers", checked)}
                   />
-                  <label htmlFor="allUsers" className="text-sm text-gray-700">
+                  <label htmlFor="allUsers" className="text-sm text-foreground/80">
                     All Users
                   </label>
                 </div>
@@ -393,7 +406,7 @@ export function NotificationsInterface() {
                     checked={notificationForm.audience.premiumUsers}
                     onCheckedChange={(checked) => handleFormChange("audience.premiumUsers", checked)}
                   />
-                  <label htmlFor="premiumUsers" className="text-sm text-gray-700">
+                  <label htmlFor="premiumUsers" className="text-sm text-foreground/60">
                     Premium User
                   </label>
                 </div>
@@ -403,7 +416,7 @@ export function NotificationsInterface() {
                     checked={notificationForm.audience.activeUsers}
                     onCheckedChange={(checked) => handleFormChange("audience.activeUsers", checked)}
                   />
-                  <label htmlFor="activeUsers" className="text-sm text-gray-700">
+                  <label htmlFor="activeUsers" className="text-sm text-foreground/60">
                     Active Users
                   </label>
                 </div>
@@ -416,9 +429,15 @@ export function NotificationsInterface() {
             <Button variant="outline" onClick={handleSaveAsDraft}>
               Save as Draft
             </Button>
-            <Button variant="outline" onClick={handleSendNow}>
+            <Button
+              variant="outline"
+              onClick={handleSendNow}
+              disabled={isSendDisabled}
+              className={isSendDisabled ? "bg-[#E5E7EB]  cursor-not-allowed" : ""}
+            >
               Send Now
             </Button>
+
             <Button onClick={handleSchedule}>Schedule</Button>
           </div>
         </DialogContent>
