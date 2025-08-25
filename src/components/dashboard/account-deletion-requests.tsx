@@ -39,7 +39,7 @@ export function AccountDeletionRequests() {
             placeholder="Search requests..."
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
-            className="pl-10"
+            className="pl-10 shadow-none"
           />
         </div>
       </CardHeader>
@@ -47,7 +47,7 @@ export function AccountDeletionRequests() {
         <div className="space-y-4">
           {filteredRequests.map((request) => (
             <>
-              <div key={request.id} className="flex items-center gap-3 p-3flex items-center gap-3 p-3 hover:bg-gray-50 rounded-lg transition-colors hover:bg-gray-50 rounded-lg transition-colors mb-0">
+              <div key={request.id} className="flex items-center  gap-3 p-3 hover:bg-gray-50 rounded-lg transition-colors hover:bg-gray-50 rounded-lg transition-colors mb-0">
                 <Avatar className="w-10 h-10">
                   <AvatarImage src={request.userAvatar || "/placeholder.svg"} />
                   <AvatarFallback>EJ</AvatarFallback>

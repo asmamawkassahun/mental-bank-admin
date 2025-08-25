@@ -56,7 +56,7 @@ export function UserTrendsChart() {
   }
 
   return (
-    <Card className="border-none shadow-none">
+    <Card className="border-none shadow-[0_1px_2px_0px_rgba(0,0,0,0.05),0_0px_0px_0px_rgba(0,0,0,0),0_0px_0px_0px_rgba(0,0,0,0)]">
       <CardHeader>
         <div className="flex items-center justify-between">
           <CardTitle className="text-lg font-semibold">New & Active User Trends</CardTitle>
