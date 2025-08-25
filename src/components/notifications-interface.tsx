@@ -177,7 +177,7 @@ export function NotificationsInterface() {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-semibold text-foreground">Notifications</h1>
+          <h1 className="text-2xl font-semibold ">Notifications</h1>
         </div>
         <div className="flex items-center gap-3">
           <Button variant="outline" size="sm" onClick={() => setIsModalOpen(true)}>
@@ -198,12 +198,12 @@ export function NotificationsInterface() {
 
       {/* Notification Management Section */}
       <div className="text-center py-8">
-        <h2 className="text-xl font-semibold text-foreground mb-2">Notification Management</h2>
+        <h2 className="text-xl font-semibold  mb-2">Notification Management</h2>
         <p className="text-foreground/60">Manage your notification templates and delivery settings</p>
       </div>
 
       {/* Notifications Table */}
-      <Card>
+      <Card className="shadow-none">
         <CardHeader>
           <div className="flex items-center justify-between">
             <div>
@@ -255,8 +255,8 @@ export function NotificationsInterface() {
                       <TableCell>
                         <Badge className={getTypeColor(notification.type)}>{notification.type}</Badge>
                       </TableCell>
-                      <TableCell className="text-foreground/60">{notification.audience}</TableCell>
-                      <TableCell className="text-foreground/60">{notification.scheduledDate}</TableCell>
+                      <TableCell className="text-foreground/100">{notification.audience}</TableCell>
+                      <TableCell className="text-foreground/100">{notification.scheduledDate}</TableCell>
                       <TableCell>
                         <Badge className={getStatusColor(notification.status)}>{notification.status}</Badge>
                       </TableCell>

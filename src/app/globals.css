@@ -121,8 +121,10 @@
 
 /* Utility classes */
 .text-foreground {
-  color: #000000;
+  --tw-text-opacity: 1;
+  color: rgb(128 128 128 / var(--tw-text-opacity));
 }
+
 .bg-background {
   background-color: #ffffff;
 }

@@ -55,7 +55,7 @@ export function UserAgeDistribution() {
 
 
   return (
-    <Card className="border-none shadow-[0_4px_6px_-1px_rgba(0,0,0,0.1)]">
+    <Card className=" shadow-[0px_1px_3px_0px_#0000000D]">
       <CardHeader>
         <CardTitle className="text-lg font-semibold">User Age Distribution</CardTitle>
         <p className="text-sm text-foreground/60">Breakdown of user age demograph</p>
@@ -90,18 +90,18 @@ export function UserAgeDistribution() {
           )}
         </div>
         <div className="w-full flex justify-center mt-4">
-  <div className="flex flex-row flex-wrap gap-4">
-    {ageData.map((item) => (
-      <div key={item.ageGroup} className="flex items-center gap-2">
-        <div
-          className="w-3 h-3 rounded-full"
-          style={{ backgroundColor: getAgeColor(item.ageGroup) }}
-        />
-        <span className="text-xs text-foreground/60">{item.range}</span>
-      </div>
-    ))}
-  </div>
-</div>
+          <div className="flex flex-row flex-wrap gap-4">
+            {ageData.map((item) => (
+              <div key={item.ageGroup} className="flex items-center gap-2">
+                <div
+                  className="w-3 h-3 rounded-full"
+                  style={{ backgroundColor: getAgeColor(item.ageGroup) }}
+                />
+                <span className="text-xs text-foreground/60">{item.range}</span>
+              </div>
+            ))}
+          </div>
+        </div>
 
         <div className="grid grid-cols-3 gap-4 mt-4 pt-4 ">
           {ageData.slice(0, 3).map((ageGroup) => (

@@ -70,7 +70,7 @@ export function SettingsInterface() {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-semibold text-foreground">Settings</h1>
+          <h1 className="text-2xl font-semibold ">Settings</h1>
           <p className="text-sm text-foreground/60 mt-1">Manage your account settings and preferences</p>
         </div>
         <div className="relative">

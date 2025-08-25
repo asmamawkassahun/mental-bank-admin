@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react"
 import { Card, CardContent } from "@/components/ui/card"
-import { TrendingUp, TrendingDown, Users, UserCheck, UserPlus, Trash2 } from "lucide-react"
+import {  Users, UserCheck, UserPlus, Trash2 } from "lucide-react"
 
 interface MetricData {
   totalUsers: { count: number; change: number; changeFromLastMonth: number }
@@ -72,25 +72,30 @@ export function MetricsCards() {
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
       {cards.map((card) => (
-        <Card key={card.title} className="bg-background">
+        <Card key={card.title} className="bg-background shadow-none">
           <CardContent className="px-6">
             <div className="flex items-center justify-between mb-4">
               <div className="p-2 bg-[#6B77E126] rounded-lg">
                 <card.icon className="w-5 h-5 text-black" />
               </div>
               <div
-                className={`flex items-center gap-1 text-4 font-medium ${
-                  card.positive ? "text-foreground/60" : "text-red-600"
-                }`}
+                className={`flex items-center gap-1 text-4 font-medium font-Geist ${card.positive ? "text-[#059669]" : "text-red-600"
+                  }`}
               >
-                {card.positive ? <TrendingUp className="w-4 h-4" /> : <TrendingDown className="w-4 h-4" />}
+                {card.positive ? <svg width="10" height="12" viewBox="0 0 10 12" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M4.95442 1.33398V10.6673M4.95442 1.33398L1.62109 4.66732M4.95442 1.33398L8.28773 4.66732" stroke="#059669" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                </svg>
+                  : <svg width="9" height="12" viewBox="0 0 9 12" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M4.48567 10.6673V1.33398M4.48567 10.6673L7.81896 7.33398M4.48567 10.6673L1.15234 7.33398" stroke="#EF4444" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                  </svg>
+                }
                 {card.change}%
               </div>
             </div>
 
             <div className="space-y-1">
               <p className="text-4 font-medium text-foreground/60">{card.title}</p>
-              <p className="text-2xl font-bold text-foreground">{card.value}</p>
+              <p className="text-2xl font-bold ">{card.value}</p>
               <p className="text-4 text-foreground/60">{card.changeText}</p>
             </div>
           </CardContent>

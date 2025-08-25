@@ -56,7 +56,7 @@ export function UserTrendsChart() {
   }
 
   return (
-    <Card className="border-none shadow-[0_4px_6px_-1px_rgba(0,0,0,0.1)]">
+    <Card className="border-none shadow-none">
       <CardHeader>
         <div className="flex items-center justify-between">
           <CardTitle className="text-lg font-semibold">New & Active User Trends</CardTitle>
@@ -64,10 +64,10 @@ export function UserTrendsChart() {
             {["Week", "Month", "Year"].map((tab) => (
               <Button
                 key={tab}
-                variant={activeTab === tab ? "default" : "ghost"}
+                // variant={activeTab === tab ? "default" : "ghost"}
                 size="sm"
                 onClick={() => handleTabChange(tab)}
-                className="text-sm"
+                className={`hover:bg-accent text-foreground/100 ${activeTab === tab ? "bg-accent hover:none " : "bg-background"}`}
                 disabled={loading}
               >
                 {tab}

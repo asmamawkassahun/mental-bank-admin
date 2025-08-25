@@ -34,8 +34,6 @@ interface AppSidebarProps {
 const navigationItems = [
   { icon: Home, label: "Dashboard", key: "dashboard" as const },
   { icon: Users, label: "Users", key: "users" as const },
-  { icon: FileText, label: "Journals", key: "journals" as const },
-  { icon: Heart, label: "Affirmations & Goals", key: "affirmations" as const },
   { icon: Bell, label: "Notifications", key: "notifications" as const },
   { icon: BarChart3, label: "Reports & Analytics", key: "reports" as const },
 ]
@@ -89,7 +87,7 @@ export function AppSidebar({ currentPage, onPageChange }: AppSidebarProps) {
             {/* <span className="text-white font-semibold text-sm">M</span> */}
           </div>
           <div className="leading-tight">
-            <h1 className="font-extrabold text-[1.25rem] text-foreground group-data-[collapsible=icon]:hidden">
+            <h1 className="font-extrabold text-[1.25rem]  group-data-[collapsible=icon]:hidden">
               Mental Bank
             </h1>
             <p className=" font-medium text-[0.625rem] group-data-[collapsible=icon]:hidden ">Prosperous you! </p>
@@ -170,7 +168,7 @@ export function AppSidebar({ currentPage, onPageChange }: AppSidebarProps) {
             </AvatarFallback>
           </Avatar>
           <div className="flex-1 min-w-0 group-data-[collapsible=icon]:hidden">
-            <div className="text-sm font-medium text-foreground">{isLoading ? "Loading..." : adminData.name}</div>
+            <div className="text-sm font-medium ">{isLoading ? "Loading..." : adminData.name}</div>
             <div className="text-xs text-gray-500 truncate">{isLoading ? "Loading..." : adminData.email}</div>
           </div>
         </div>

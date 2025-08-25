@@ -301,7 +301,7 @@ export function FeedbackInterface() {
       <div className="bg-background border-b border-gray-200 px-6 py-4">
         <div className="flex items-center justify-between">
           <div>
-            <h1 className="text-2xl font-semibold text-foreground">Feedbacks</h1>
+            <h1 className="text-2xl font-semibold ">Feedbacks</h1>
             <p className="text-sm text-foreground/60 mt-1">Monitor user mental health trends and journal ac</p>
           </div>
           <div className="flex items-center gap-3">
@@ -326,10 +326,10 @@ export function FeedbackInterface() {
       </div>
 
       <main className="flex-1 p-6 space-y-6">
-        <div className="bg-background rounded-lg shadow-[0_4px_6px_-1px_rgba(0,0,0,0.1)] border-none p-6">
+        <div className="bg-background rounded-lg shadow-[0px_1px_2px_0px_#0000000D] border p-6">
           <div className="flex items-center justify-between mb-6">
             <div>
-              <h2 className="text-lg font-semibold text-foreground">Popular Questions</h2>
+              <h2 className="text-lg font-semibold ">Popular Questions</h2>
               <p className="text-sm text-foreground/60">Frequently accessed help articles</p>
             </div>
             <Button size="sm" onClick={() => setIsModalOpen(true)}>
@@ -357,8 +357,8 @@ export function FeedbackInterface() {
                         <span className="">{article.title}</span>
                       </div>
                     </td>
-                    <td className="py-4 px-4 text-foreground">{article.views.toLocaleString()}</td>
-                    <td className="py-4 px-4 text-foreground">{article.lastUpdated}</td>
+                    <td className="py-4 px-4 ">{article.views.toLocaleString()}</td>
+                    <td className="py-4 px-4 ">{article.lastUpdated}</td>
                     <td className="py-4 px-4">
                       <div className="flex items-center gap-2">
                         <Button variant="ghost" size="sm">
@@ -376,11 +376,11 @@ export function FeedbackInterface() {
           </div>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-          <div className="lg:col-span-2 bg-background rounded-lg shadow-[0_4px_6px_-1px_rgba(0,0,0,0.1)] border-none p-6">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 ">
+          <div className="lg:col-span-2 bg-background rounded-lg border p-6 shadow-[0px_0px_0px_0px_#00000000,0px_0px_0px_0px_#00000000,0px_1px_2px_0px_#0000000D]">
             <div className="flex items-center justify-between mb-6">
               <div className="flex items-center gap-4">
-                <h2 className="text-lg font-semibold text-foreground">User Feedback</h2>
+                <h2 className="text-lg font-semibold ">User Feedback</h2>
                 <Badge variant="secondary" className="bg-blue-100 text-blue-800">
                   {totalFeedbacks} total
                 </Badge>
@@ -425,12 +425,12 @@ export function FeedbackInterface() {
                     <div className="flex-1">
                       <div className="flex items-center justify-between mb-2">
                         <div>
-                          <h4 className="font-medium text-foreground">{feedback.user.name}</h4>
+                          <h4 className="font-medium ">{feedback.user.name}</h4>
                           <p className="text-sm text-foreground/60">Feedback #{feedback.user.feedbackId}</p>
                         </div>
                         <span className="text-sm text-foreground/60">{feedback.timestamp}</span>
                       </div>
-                      <p className="text-foreground text-sm leading-relaxed">{feedback.content}</p>
+                      <p className=" text-sm leading-relaxed">{feedback.content}</p>
                     </div>
                   </div>
                 </div>
@@ -439,7 +439,7 @@ export function FeedbackInterface() {
 
             <div className="flex items-center justify-between mt-6 pt-4 border-t border-gray-200">
               <p className="text-sm text-foreground/60">
-                Showing  <span className="text-foreground"> {endIndex} </span> of <span className="text-foreground">{totalFeedbacks}</span> feedbacks
+                Showing  <span className="text-foreground/100"> {endIndex} </span> of <span className="text-foreground/100">{totalFeedbacks}</span> feedbacks
               </p>
               <div className="flex items-center gap-2">
                 <Button
@@ -473,10 +473,10 @@ export function FeedbackInterface() {
             </div>
           </div>
 
-          <div className="bg-background rounded-lg shadow-[0_4px_6px_-1px_rgba(0,0,0,0.1)] border-none p-6">
-            <div className="flex items-center justify-between mb-6">
+          <div className="bg-background rounded-lg border p-6 shadow-[0px_1px_2px_0px_#0000000D,0px_0px_0px_0px_#00000000,0px_0px_0px_0px_#00000000] max-h-122">
+            <div className="flex items-center justify-between mb-6 mx-auto">
               <div>
-                <h2 className="text-lg font-semibold text-foreground">Feedback Analysis</h2>
+                <h2 className="text-lg font-semibold ">Feedback Analysis</h2>
                 <p className="text-sm text-foreground/60">Customer feedback sentiment overview</p>
               </div>
             </div>
@@ -501,27 +501,27 @@ export function FeedbackInterface() {
               </ResponsiveContainer>
             </div>
 
-            <div className="space-y-3">
-              <div className="flex items-center justify-between">
+            <div className="space-y-3 max-w-80 mx-auto">
+              <div className="flex items-center justify-between ">
                 <div className="flex items-center gap-2">
                   <div className="w-3 h-3 bg-green-500 rounded-full"></div>
-                  <span className="text-sm font-medium text-foreground">Positive</span>
+                  <span className="text-sm font-medium ">Positive</span>
                 </div>
-                <span className="text-sm font-semibold text-foreground">{feedbackAnalysis.positive}%</span>
+                <span className="text-sm font-semibold ">{feedbackAnalysis.positive}%</span>
               </div>
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-2">
                   <div className="w-3 h-3 bg-gray-500 rounded-full"></div>
-                  <span className="text-sm font-medium text-foreground">Neutral</span>
+                  <span className="text-sm font-medium ">Neutral</span>
                 </div>
-                <span className="text-sm font-semibold text-foreground">{feedbackAnalysis.neutral}%</span>
+                <span className="text-sm font-semibold ">{feedbackAnalysis.neutral}%</span>
               </div>
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-2">
                   <div className="w-3 h-3 bg-red-500 rounded-full"></div>
-                  <span className="text-sm font-medium text-foreground">Negative</span>
+                  <span className="text-sm font-medium ">Negative</span>
                 </div>
-                <span className="text-sm font-semibold text-foreground">{feedbackAnalysis.negative}%</span>
+                <span className="text-sm font-semibold ">{feedbackAnalysis.negative}%</span>
               </div>
             </div>
           </div>

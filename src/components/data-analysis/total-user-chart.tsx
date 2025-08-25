@@ -23,7 +23,7 @@ export function TotalUserChart({ data, loading = false, onTimeFrameChange }: Tot
     }
 
     return (
-        <Card className="lg:col-span-2 border-none shadow-[0_4px_6px_-1px_rgba(0,0,0,0.1)]">
+        <Card className="lg:col-span-2 shadow-[0px_1px_3px_0px_#0000000D]">
             <CardHeader className="flex flex-row items-center justify-between">
                 <div>
                     <CardTitle className="text-lg font-semibold">Total User</CardTitle>

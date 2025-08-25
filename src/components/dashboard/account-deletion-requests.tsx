@@ -30,7 +30,7 @@ export function AccountDeletionRequests() {
   )
 
   return (
-    <Card>
+    <Card className="shadow-none">
       <CardHeader>
         <CardTitle className="text-lg font-semibold py-2">Account Deletion Requests</CardTitle>
         <div className="relative bg-[#F9FAFB]">
@@ -47,13 +47,13 @@ export function AccountDeletionRequests() {
         <div className="space-y-4">
           {filteredRequests.map((request) => (
             <>
-              <div key={request.id} className="flex items-center gap-3 p-3 hover:bg-gray-50 rounded-lg transition-colors">
+              <div key={request.id} className="flex items-center gap-3 p-3flex items-center gap-3 p-3 hover:bg-gray-50 rounded-lg transition-colors hover:bg-gray-50 rounded-lg transition-colors mb-0">
                 <Avatar className="w-10 h-10">
                   <AvatarImage src={request.userAvatar || "/placeholder.svg"} />
                   <AvatarFallback>EJ</AvatarFallback>
                 </Avatar>
                 <div className="flex-1">
-                  <div className="font-medium text-foreground">{request.userName}</div>
+                  <div className="font-medium ">{request.userName}</div>
                   <div className="text-sm text-red-600">{request.status}</div>
                 </div>
                 <div className="text-sm text-gray-500">{request.timestamp}</div>

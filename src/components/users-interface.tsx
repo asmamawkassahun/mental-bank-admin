@@ -1,7 +1,7 @@
 "use client"
 
 import { useState, useEffect } from "react"
-import { Search, Filter, Download, Plus, MoreHorizontal, ChevronLeft, ChevronRight } from "lucide-react"
+import { Search, Filter, Download, Plus, MoreHorizontal, ChevronLeft, ChevronRight, EllipsisVertical } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Checkbox } from "@/components/ui/checkbox"
@@ -79,7 +79,7 @@ export function UsersInterface() {
     }
 
     const getStatusColor = (status: string) => {
-        return status === "Active" ? "text-green-600" : "text-gray-400"
+        return status === "Active" ? "text-foreground/100" : "text-gray-400"
     }
 
     const handlePreviousPage = () => {
@@ -195,16 +195,16 @@ export function UsersInterface() {
                                         <span className="font-medium">{user.name}</span>
                                     </div>
                                 </TableCell>
-                                <TableCell className="text-foreground/60">{user.email}</TableCell>
+                                <TableCell className="text-foreground/100">{user.email}</TableCell>
                                 <TableCell>
-                                    <Badge variant={getRoleBadgeVariant(user.role)} className={user.role === "Premium User" ? "bg-[#DBEAFE] text-[#1E40AF]" : user.role !== "Admin" ? "bg-[#F3F4F6] border-none" : ""}>{user.role}</Badge>
+                                    <Badge variant={getRoleBadgeVariant(user.role)} className={user.role === "Premium User" ? "bg-[#DBEAFE] text-[#1E40AF]" : user.role !== "Admin" ? "bg-[#F3F4F6] text-foreground/100 border-none" : ""}>{user.role}</Badge>
                                 </TableCell>
                                 <TableCell>
                                     <div className="flex items-center gap-2">
                                         <div
                                             className={`w-2 h-2 rounded-full ${user.status === "Active" ? "bg-green-500" : "bg-gray-400"}`}
-                                        />
-                                        <span className={getStatusColor(user.status)}>{user.status}</span>
+                                        />getRoleBadgeVariant
+                                        <span className="text-foreground/100">{user.status}</span>
                                     </div>
                                 </TableCell>
                                 <TableCell className="text-foreground/60">{user.lastActive}</TableCell>
@@ -212,7 +212,8 @@ export function UsersInterface() {
                                     <DropdownMenu>
                                         <DropdownMenuTrigger asChild>
                                             <Button variant="ghost" size="sm">
-                                                <MoreHorizontal className="h-4 w-4" />
+                                                <EllipsisVertical/>
+                                                {/* <MoreHorizontal className="h-4 w-4" /> */}
                                             </Button>
                                         </DropdownMenuTrigger>
                                         <DropdownMenuContent align="end">
@@ -231,7 +232,7 @@ export function UsersInterface() {
 
             {/* Pagination */}
             <div className="flex items-center justify-between">
-                <div className="text-sm foreground/60">
+                <div className="text-sm text-foreground">
                     Showing {startIndex} to {endIndex} of {safeData.total} users
                 </div>
                 {showPagination && (
