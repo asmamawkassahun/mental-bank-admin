@@ -86,7 +86,7 @@ export function SettingsInterface() {
 
       <div className="space-y-6">
         {/* Profile Information */}
-        <Card>
+        <Card className="shadow-none">
           <CardHeader>
             <CardTitle>Profile Information</CardTitle>
             <CardDescription>Update your personal information and profile picture</CardDescription>
@@ -114,7 +114,7 @@ export function SettingsInterface() {
         </Card>
 
         {/* Personal Information */}
-        <Card>
+        <Card className="shadow-none">
           <CardHeader>
             <CardTitle>Personal Information</CardTitle>
             <CardDescription>Manage your personal details and contact information</CardDescription>
@@ -154,7 +154,7 @@ export function SettingsInterface() {
         </Card>
 
         {/* Security Settings */}
-        <Card className="space-y-6">
+        <Card className="space-y-6 shadow-none">
           {/* Security Settings */}
           <div className="p-0 border-0 shadow-none">
             <CardHeader>

@@ -11,6 +11,10 @@ import { Label } from "@/components/ui/label"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
 import { Calendar, Filter, Download, Settings, Plus, DownloadIcon, Trash2, ChevronDown, X, CircleQuestionMark } from "lucide-react"
 import { PieChart, Pie, Cell, ResponsiveContainer } from "recharts"
+import axios from "axios"
+import { useQuery } from "@tanstack/react-query"
+
+const baseUrl = process.env.NEXT_PUBLIC_API_URL
 
 interface KnowledgeBaseArticle {
   id: string
@@ -31,20 +35,10 @@ interface UserFeedback {
   sentiment?: "positive" | "neutral" | "negative"
 }
 
-interface FeedbackAnalysis {
-  positive: number
-  neutral: number
-  negative: number
-}
-
 export function FeedbackInterface() {
   const [knowledgeBase, setKnowledgeBase] = useState<KnowledgeBaseArticle[]>([])
   const [userFeedbacks, setUserFeedbacks] = useState<UserFeedback[]>([])
-  const [feedbackAnalysis, setFeedbackAnalysis] = useState<FeedbackAnalysis>({
-    positive: 65,
-    neutral: 25,
-    negative: 10,
-  })
+
   const [currentPage, setCurrentPage] = useState(1)
   const [totalFeedbacks, setTotalFeedbacks] = useState(124)
   const [timeframeFilter, setTimeframeFilter] = useState("Recent")
@@ -63,6 +57,8 @@ export function FeedbackInterface() {
   const totalPages = Math.ceil(totalFeedbacks / feedbacksPerPage)
   const startIndex = (currentPage - 1) * feedbacksPerPage + 1
   const endIndex = Math.min(currentPage * feedbacksPerPage, totalFeedbacks)
+
+  const token = localStorage.getItem("token")
 
   const timeframeOptions = [
     { value: "Recent", label: "Recent" },
@@ -192,11 +188,31 @@ export function FeedbackInterface() {
     setCurrentPage(page)
   }
 
-  const pieData = [
-    { name: "Positive", value: feedbackAnalysis.positive, color: "#10b981" },
-    { name: "Neutral", value: feedbackAnalysis.neutral, color: "#6b7280" },
-    { name: "Negative", value: feedbackAnalysis.negative, color: "#ef4444" },
-  ]
+  // Fetch feedback analysis data
+  const { data: feedbackAnalysisData, isLoading: feedbackAnalysisLoadingChart } = useQuery({
+    queryKey: ["feedbackAnalysisData"],
+    queryFn: async () => {
+      const res = await axios.get(`${baseUrl}/admin/feedbacks/analysis`, {
+        headers: { Authorization: `Bearer ${token}` },
+      })
+      return res.data
+    },
+  })
+
+  const colors: Record<string, string> = {
+    Positive: "#22C55E",
+    Neutral: "#94A3B8",
+    Negative: "#EF4444",
+  };
+
+  console.log("Feedback Analysis Data: ", feedbackAnalysisData)
+
+  const pieData = feedbackAnalysisData?.labels?.map((label: any, index: any) => ({
+    name: label,
+    value: feedbackAnalysisData.percents[index], // keep the % sign
+    color: colors[label],
+  }));
+  console.log("Pie Data: ", pieData)
 
   const validateForm = () => {
     const errors: { title?: string; body?: string } = {}
@@ -243,7 +259,7 @@ export function FeedbackInterface() {
         fetch("/api/feedback/knowledge-base")
           .then((res) => res.json())
           .then((data) => setKnowledgeBase(data))
-          .catch(() => {})
+          .catch(() => { })
       } else {
         throw new Error("Failed to submit question")
       }
@@ -493,7 +509,7 @@ export function FeedbackInterface() {
                     paddingAngle={0}
                     dataKey="value"
                   >
-                    {pieData.map((entry, index) => (
+                    {pieData?.map((entry, index) => (
                       <Cell key={`cell-${index}`} fill={entry.color} />
                     ))}
                   </Pie>
@@ -504,24 +520,24 @@ export function FeedbackInterface() {
             <div className="space-y-3 max-w-80 mx-auto">
               <div className="flex items-center justify-between ">
                 <div className="flex items-center gap-2">
-                  <div className="w-3 h-3 bg-green-500 rounded-full"></div>
+                  <div className="w-3 h-3 bg-[#22C55E] rounded-full"></div>
                   <span className="text-sm font-medium ">Positive</span>
                 </div>
-                <span className="text-sm font-semibold ">{feedbackAnalysis.positive}%</span>
+                <span className="text-sm font-semibold ">{pieData?.find(item => item.name === "Positive")?.value}%</span>
               </div>
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-2">
-                  <div className="w-3 h-3 bg-gray-500 rounded-full"></div>
+                  <div className="w-3 h-3 bg-[#94A3B8] rounded-full"></div>
                   <span className="text-sm font-medium ">Neutral</span>
                 </div>
-                <span className="text-sm font-semibold ">{feedbackAnalysis.neutral}%</span>
+                <span className="text-sm font-semibold ">{pieData?.find(item => item.name === "Neutral")?.value}%</span>
               </div>
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-2">
-                  <div className="w-3 h-3 bg-red-500 rounded-full"></div>
+                  <div className="w-3 h-3 bg-[#EF4444] rounded-full"></div>
                   <span className="text-sm font-medium ">Negative</span>
                 </div>
-                <span className="text-sm font-semibold ">{feedbackAnalysis.negative}%</span>
+                <span className="text-sm font-semibold ">{pieData?.find(item => item.name === "Negative")?.value}%</span>
               </div>
             </div>
           </div>

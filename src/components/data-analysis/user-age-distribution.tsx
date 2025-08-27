@@ -4,36 +4,19 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip } from "recharts"
 import { useState, useEffect } from "react"
 
+
+
 interface AgeDistributionData {
-  ageGroup: string
-  percentage: number
-  color: string
-  range: string // Added range property for age ranges
+    data: Array<{ ageGroup: string; percentage: number; counts: number }>
+    loading?: boolean
 }
 
 const COLORS = ["#6366f1", "#a855f7", "#3b82f6", "#ef4444", "#6b7280"]
 
-export function UserAgeDistribution() {
-  const [ageData, setAgeData] = useState<AgeDistributionData[]>([])
-  const [loading, setLoading] = useState(true)
+export function UserAgeDistribution({data, loading}:  AgeDistributionData) {
+ 
 
-  useEffect(() => {
-    const fetchAgeDistribution = async () => {
-      try {
-        const response = await fetch("/api/reports/age-distribution")
-        console.log("API response status:", response.status)
-        const data = await response.json()
-        setAgeData(data.ageDistribution || [])
-      } catch (error) {
-        console.error("Failed to fetch age distribution data:", error)
-        setAgeData([])
-      } finally {
-        setLoading(false)
-      }
-    }
-
-    fetchAgeDistribution()
-  }, [])
+ const ageData = data
 
   const getAgeColor = (ageGroup: string) => {
     switch (ageGroup) {
@@ -91,23 +74,23 @@ export function UserAgeDistribution() {
         </div>
         <div className="w-full flex justify-center mt-4">
           <div className="flex flex-row flex-wrap gap-4">
-            {ageData.map((item) => (
+            {ageData?.map((item) => (
               <div key={item.ageGroup} className="flex items-center gap-2">
                 <div
                   className="w-3 h-3 rounded-full"
                   style={{ backgroundColor: getAgeColor(item.ageGroup) }}
                 />
-                <span className="text-xs text-foreground/60">{item.range}</span>
+                <span className="text-xs text-foreground/60">{item.ageGroup}</span>
               </div>
             ))}
           </div>
         </div>
 
         <div className="grid grid-cols-3 gap-4 mt-4 pt-4 ">
-          {ageData.slice(0, 3).map((ageGroup) => (
+          {ageData?.slice(0, 3).map((ageGroup) => (
             <div key={ageGroup.ageGroup} className="text-center">
               <div className="text-lg font-semibold">{ageGroup.percentage}%</div>
-              <div className="text-xs text-foreground/60">{ageGroup.range}</div>
+              <div className="text-xs text-foreground/60">{ageGroup.ageGroup}</div>
             </div>
           ))}
         </div>

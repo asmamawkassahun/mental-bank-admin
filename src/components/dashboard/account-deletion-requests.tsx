@@ -46,7 +46,7 @@ export function AccountDeletionRequests() {
       <CardContent>
         <div className="space-y-4">
           {filteredRequests.map((request) => (
-            <>
+            <div key={request.id}>
               <div key={request.id} className="flex items-center  gap-3 p-3 hover:bg-gray-50 rounded-lg transition-colors hover:bg-gray-50 rounded-lg transition-colors mb-0">
                 <Avatar className="w-10 h-10">
                   <AvatarImage src={request.userAvatar || "/placeholder.svg"} />
@@ -60,7 +60,7 @@ export function AccountDeletionRequests() {
               </div>
               <Separator />
 
-            </>
+            </div>
           ))}
         </div>
       </CardContent>

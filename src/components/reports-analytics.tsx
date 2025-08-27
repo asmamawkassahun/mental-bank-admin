@@ -9,7 +9,20 @@ import { TotalUserChart } from "@/components/data-analysis/total-user-chart"
 import { UserAgeDistribution } from "@/components/data-analysis/user-age-distribution"
 import { AppUsageTiming } from "@/components/data-analysis/app-usage-timing"
 import { MetricsCards } from "@/components/dashboard/metrics-cards"
+import { useQuery } from "@tanstack/react-query"
+import axios from "axios"
 
+interface BackendResponse {
+  labels: string[]
+  counts: number[]
+}
+
+interface FormattedData {
+  period: string
+  users: number
+}
+
+const baseUrl = process.env.NEXT_PUBLIC_API_URL
 
 interface ReportsData {
   metrics: {
@@ -32,17 +45,61 @@ interface ReportsData {
 
 export function ReportsAnalytics() {
   const [data, setData] = useState<ReportsData | null>(null)
-  const [loading, setLoading] = useState(true)
   const [timeFrame, setTimeFrame] = useState<"week" | "month" | "year">("month")
-  const [chartLoading, setChartLoading] = useState(false)
+
+
+  const token = localStorage.getItem("token")
+
+
+  // Fetch total user trend data
+  const { data: totalUserTrend, error, isLoading: totalUserLoadingChart } = useQuery({
+    queryKey: ["totalUserTrend"],
+    queryFn: async () => {
+      const res = await axios.get(`${baseUrl}/admin/dashboard/total-users-trend`, {
+        headers: { Authorization: `Bearer ${token}` },
+      })
+      return res.data
+    },
+  })
+
+  console.log("Total User Trend Data: ", totalUserTrend)
+
+  const formattedData: FormattedData[] = totalUserTrend?.labels?.map((label: any, index: any) => ({
+    period: label,
+    users: totalUserTrend.counts[index] // replace with actual counts or scale if needed
+  }))
+
+  console.log("Formatted Data: ", formattedData)
+
+
+  // Fetch age distribution data
+  const { data: ageDistributionData, isLoading: ageDistributionLoadingChart } = useQuery({
+    queryKey: ["ageDistribution"],
+    queryFn: async () => {
+      const res = await axios.get(`${baseUrl}/admin/dashboard/age-distribution`, {
+        headers: { Authorization: `Bearer ${token}` },
+      })
+      return res.data
+    },
+  })
+
+  console.log("ageDistribution: ", ageDistributionData)
+
+
+  const formattedAge = ageDistributionData?.labels?.map((label, idx) => ({
+    ageGroup: label,
+    percentage: ageDistributionData.percents[idx],
+    counts: ageDistributionData.counts[idx],
+  }))
+
+  console.log("Formatted Age Distribution Data: ", formattedAge)
+
+
 
   useEffect(() => {
     fetchReportsData()
   }, [])
 
-  useEffect(() => {
-    fetchTotalUserChart()
-  }, [timeFrame])
 
   const fetchReportsData = async () => {
     try {
@@ -51,33 +108,18 @@ export function ReportsAnalytics() {
       setData(result)
     } catch (error) {
       console.error("Failed to fetch reports data:", error)
-    } finally {
-      setLoading(false)
     }
   }
 
-  const fetchTotalUserChart = async () => {
-    setChartLoading(true)
-    try {
-      const response = await fetch(`/api/reports/total-users?timeframe=${timeFrame}`)
-      const result = await response.json()
-      if (data) {
-        setData({ ...data, totalUserChart: result.data })
-      }
-    } catch (error) {
-      console.error("Failed to fetch chart data:", error)
-    } finally {
-      setChartLoading(false)
-    }
-  }
 
-  if (loading) {
+  if (totalUserLoadingChart) {
     return <div className="flex-1 flex items-center justify-center">Loading...</div>
   }
 
   if (!data) {
     return <div className="flex-1 flex items-center justify-center">Failed to load data</div>
   }
+  console.log("totalUserChart : ", data.totalUserChart)
 
   const safeData = {
     ...data,
@@ -127,14 +169,14 @@ export function ReportsAnalytics() {
 
       <main className="flex-1 p-6 space-y-6">
         {/* Metrics Cards */}
-         <MetricsCards />
+        <MetricsCards />
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
           {/* Total User Chart */}
-          <TotalUserChart data={safeData.totalUserChart} loading={chartLoading} onTimeFrameChange={setTimeFrame} />
+          <TotalUserChart data={formattedData} loading={totalUserLoadingChart} onTimeFrameChange={setTimeFrame} />
 
           {/* User Age Distribution */}
-          <UserAgeDistribution data={safeData.ageDistribution} />
+          <UserAgeDistribution data={formattedAge} loading={ageDistributionLoadingChart} />
         </div>
 
         {/* App Usage Timing */}

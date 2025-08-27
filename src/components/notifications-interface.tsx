@@ -103,7 +103,7 @@ export function NotificationsInterface() {
     }
   }
 
-  const handleFormChange = (field: string, value: any) => {
+  const handleFormChange = (field: string, value: unknown) => {
     if (field.startsWith("audience.")) {
       const audienceField = field.split(".")[1]
       setNotificationForm((prev) => ({
@@ -177,7 +177,7 @@ export function NotificationsInterface() {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-semibold ">Notifications</h1>
+          <h1 className="text-xl font-semibold ">Notifications</h1>
         </div>
         <div className="flex items-center gap-3">
           <Button variant="outline" size="sm" onClick={() => setIsModalOpen(true)}>
@@ -198,7 +198,7 @@ export function NotificationsInterface() {
 
       {/* Notification Management Section */}
       <div className="text-center py-8">
-        <h2 className="text-xl font-semibold  mb-2">Notification Management</h2>
+        <h2 className="text-[1.5rem] font-semibold  mb-2">Notification Management</h2>
         <p className="text-foreground/60">Manage your notification templates and delivery settings</p>
       </div>
 

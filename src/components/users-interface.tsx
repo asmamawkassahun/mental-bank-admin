@@ -122,14 +122,14 @@ export function UsersInterface() {
     const showPagination = safeData.total > 8
 
     return (
-        <div className="flex-1 space-y-6 p-6">
+        <div className="flex-1 space-y-6 p-6 bg-red-500 ">
             {/* Header */}
             <div className="flex items-center justify-between">
                 <div>
                     <h1 className="text-3xl font-bold tracking-tight">Users</h1>
                 </div>
                 <div className="flex items-center gap-2">
-                    <div className="relative">
+                    {/* <div className="relative">
                         <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
                         <Input
                             placeholder="Search users..."
@@ -137,7 +137,7 @@ export function UsersInterface() {
                             onChange={(e) => setSearchQuery(e.target.value)}
                             className="pl-10 w-80"
                         />
-                    </div>
+                    </div> */}
                     <Button variant="outline" size="sm">
                         <Filter className="h-4 w-4 mr-2" />
                         Filter
@@ -154,81 +154,84 @@ export function UsersInterface() {
             </div>
 
             {/* Users Table */}
-            <div className="border rounded-lg">
-                <Table>
-                    <TableHeader>
-                        <TableRow>
-                            <TableHead className="w-12">
-                                <Checkbox
-                                    checked={selectedUsers.length === safeData.users.length && safeData.users.length > 0}
-                                    onCheckedChange={handleSelectAll}
-                                />
-                            </TableHead>
-                            <TableHead>User</TableHead>
-                            <TableHead>Email</TableHead>
-                            <TableHead>Role</TableHead>
-                            <TableHead>Status</TableHead>
-                            <TableHead>Last Active</TableHead>
-                            <TableHead className="w-12">Actions</TableHead>
-                        </TableRow>
-                    </TableHeader>
-                    <TableBody>
-                        {safeData.users.map((user) => (
-                            <TableRow key={user.id} >
-                                <TableCell>
+            <div className="border rounded-lg overflow-hidden">
+                <div className="overflow-x-auto">
+                    <Table className="min-w-[700px]">
+                        <TableHeader>
+                            <TableRow>
+                                <TableHead className="w-12">
                                     <Checkbox
-                                        checked={selectedUsers.includes(user.id)}
-                                        onCheckedChange={(checked) => handleSelectUser(user.id, checked as boolean)}
+                                        checked={selectedUsers.length === safeData.users.length && safeData.users.length > 0}
+                                        onCheckedChange={handleSelectAll}
                                     />
-                                </TableCell>
-                                <TableCell>
-                                    <div className="flex items-center gap-3">
-                                        <Avatar className="h-8 w-8">
-                                            <AvatarImage src={user.avatar || "/placeholder.svg"} alt={user.name} />
-                                            <AvatarFallback>
-                                                {user.name
-                                                    .split(" ")
-                                                    .map((n) => n[0])
-                                                    .join("")}
-                                            </AvatarFallback>
-                                        </Avatar>
-                                        <span className="font-medium">{user.name}</span>
-                                    </div>
-                                </TableCell>
-                                <TableCell className="text-foreground/100">{user.email}</TableCell>
-                                <TableCell>
-                                    <Badge variant={getRoleBadgeVariant(user.role)} className={user.role === "Premium User" ? "bg-[#DBEAFE] text-[#1E40AF]" : user.role !== "Admin" ? "bg-[#F3F4F6] text-foreground/100 border-none" : ""}>{user.role}</Badge>
-                                </TableCell>
-                                <TableCell>
-                                    <div className="flex items-center gap-2">
-                                        <div
-                                            className={`w-2 h-2 rounded-full ${user.status === "Active" ? "bg-green-500" : "bg-gray-400"}`}
-                                        />getRoleBadgeVariant
-                                        <span className="text-foreground/100">{user.status}</span>
-                                    </div>
-                                </TableCell>
-                                <TableCell className="text-foreground/60">{user.lastActive}</TableCell>
-                                <TableCell>
-                                    <DropdownMenu>
-                                        <DropdownMenuTrigger asChild>
-                                            <Button variant="ghost" size="sm">
-                                                <EllipsisVertical/>
-                                                {/* <MoreHorizontal className="h-4 w-4" /> */}
-                                            </Button>
-                                        </DropdownMenuTrigger>
-                                        <DropdownMenuContent align="end">
-                                            <DropdownMenuItem>View Profile</DropdownMenuItem>
-                                            <DropdownMenuItem>Edit User</DropdownMenuItem>
-                                            <DropdownMenuItem>Reset Password</DropdownMenuItem>
-                                            <DropdownMenuItem className="text-red-600">Delete User</DropdownMenuItem>
-                                        </DropdownMenuContent>
-                                    </DropdownMenu>
-                                </TableCell>
+                                </TableHead>
+                                <TableHead>User</TableHead>
+                                <TableHead>Email</TableHead>
+                                <TableHead>Role</TableHead>
+                                <TableHead>Status</TableHead>
+                                <TableHead>Last Active</TableHead>
+                                <TableHead className="w-12">Actions</TableHead>
                             </TableRow>
-                        ))}
-                    </TableBody>
-                </Table>
+                        </TableHeader>
+                        <TableBody>
+                            {safeData.users.map((user) => (
+                                <TableRow key={user.id} >
+                                    <TableCell>
+                                        <Checkbox
+                                            checked={selectedUsers.includes(user.id)}
+                                            onCheckedChange={(checked) => handleSelectUser(user.id, checked as boolean)}
+                                        />
+                                    </TableCell>
+                                    <TableCell>
+                                        <div className="flex items-center gap-3">
+                                            <Avatar className="h-8 w-8">
+                                                <AvatarImage src={user.avatar || "/placeholder.svg"} alt={user.name} />
+                                                <AvatarFallback>
+                                                    {user.name
+                                                        .split(" ")
+                                                        .map((n) => n[0])
+                                                        .join("")}
+                                                </AvatarFallback>
+                                            </Avatar>
+                                            <span className="font-medium">{user.name}</span>
+                                        </div>
+                                    </TableCell>
+                                    <TableCell className="text-foreground/100">{user.email}</TableCell>
+                                    <TableCell>
+                                        <Badge variant={getRoleBadgeVariant(user.role)} className={user.role === "Premium User" ? "bg-[#DBEAFE] text-[#1E40AF]" : user.role !== "Admin" ? "bg-[#F3F4F6] text-foreground/100 border-none" : ""}>{user.role}</Badge>
+                                    </TableCell>
+                                    <TableCell>
+                                        <div className="flex items-center gap-2">
+                                            <div
+                                                className={`w-2 h-2 rounded-full ${user.status === "Active" ? "bg-green-500" : "bg-gray-400"}`}
+                                            />
+                                            <span className="text-foreground/100">{user.status}</span>
+                                        </div>
+                                    </TableCell>
+                                    <TableCell className="text-foreground/60">{user.lastActive}</TableCell>
+                                    <TableCell>
+                                        <DropdownMenu>
+                                            <DropdownMenuTrigger asChild>
+                                                <Button variant="ghost" size="sm">
+                                                    <EllipsisVertical />
+                                                    {/* <MoreHorizontal className="h-4 w-4" /> */}
+                                                </Button>
+                                            </DropdownMenuTrigger>
+                                            <DropdownMenuContent align="end">
+                                                <DropdownMenuItem>View Profile</DropdownMenuItem>
+                                                <DropdownMenuItem>Edit User</DropdownMenuItem>
+                                                <DropdownMenuItem>Reset Password</DropdownMenuItem>
+                                                <DropdownMenuItem className="text-red-600">Delete User</DropdownMenuItem>
+                                            </DropdownMenuContent>
+                                        </DropdownMenu>
+                                    </TableCell>
+                                </TableRow>
+                            ))}
+                        </TableBody>
+                    </Table>
+                </div>
             </div>
+
 
             {/* Pagination */}
             <div className="flex items-center justify-between">
