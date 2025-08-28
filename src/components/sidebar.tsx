@@ -103,6 +103,7 @@ export function AppSidebar({ currentPage, onPageChange }: AppSidebarProps) {
               {navigationItems.map((item) => (
                 <SidebarMenuItem key={item.label}>
                   <SidebarMenuButton
+                  className="cursor-pointer"
                     onClick={() => {
                       if (item.key === "dashboard") onPageChange("dashboard")
                       if (item.key === "reports") onPageChange("reports")
@@ -133,6 +134,7 @@ export function AppSidebar({ currentPage, onPageChange }: AppSidebarProps) {
               {supportItems.map((item) => (
                 <SidebarMenuItem key={item.label}>
                   <SidebarMenuButton
+                  className="cursor-pointer"
                     onClick={() => {
                       if (item.key === "feedback") onPageChange("feedback")
                       if (item.key === "settings") onPageChange("settings")

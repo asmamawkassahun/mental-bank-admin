@@ -59,7 +59,7 @@ export function UserTrendsChart() {
       return res.data
     },
   })
-  console.log("Query successful! Data:", trendData)
+  console.log("Query successful! Data: ", trendData)
 
 
   function transformTrendData(trendData: BackendResponse): TransformedData {
@@ -190,7 +190,7 @@ export function UserTrendsChart() {
             <div className="text-foreground/60">
               Active users:{" "}
               <span className="font-medium text-foreground">
-                {selected.stats?.activeUsers?.toLocaleString()} (+{selected.stats?.activeUsersChange}%)
+                {selected.stats?.activeUsers?.toLocaleString()} ({selected.stats?.activeUsersChange}%)
               </span>
             </div>
           </div>

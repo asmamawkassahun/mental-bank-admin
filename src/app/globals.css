@@ -45,6 +45,7 @@
   --radius: 0.625rem;
   --background: oklch(1 0 0);
   --foreground: oklch(0.145 0 0);
+  --text-secondary: #71717A;
   --card: oklch(1 0 0);
   --card-foreground: oklch(0.145 0 0);
   --popover: oklch(1 0 0);
@@ -120,7 +121,7 @@
 }
 
 /* Utility classes */
-.text-foreground {
+/* .text-foreground {
   --tw-text-opacity: 1;
   color: rgb(128 128 128 / var(--tw-text-opacity));
 }
@@ -128,5 +129,5 @@
 .bg-background {
   background-color: #ffffff;
 }
-
+ */
 
