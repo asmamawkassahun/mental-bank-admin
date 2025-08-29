@@ -361,7 +361,10 @@ export function NotificationsInterface() {
                     type="button"
                     size="sm"
                     onClick={() => handleFormChange("type", "Upgrade")}
-                    className={`flex flex-col items-center justify-center gap-2 p-8 border ${notificationForm.type === "Upgrade" ? "bg-[#EBF5FF] text-foreground border-[#7C9CBF] hover:bg-[#EBF5FF]" : "bg-background text-foreground"
+                    className={`flex flex-col items-center justify-center gap-2 p-8 border
+    ${notificationForm.type === "Upgrade"
+                        ? "bg-[#EBF5FF] text-foreground border-[#7C9CBF] hover:bg-[#EBF5FF]"
+                        : "bg-background text-foreground hover:bg-black/5"
                       }`}
                   >
                     ✨

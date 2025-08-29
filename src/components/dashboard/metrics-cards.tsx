@@ -2,9 +2,12 @@
 
 import { useEffect, useState } from "react"
 import { Card, CardContent } from "@/components/ui/card"
-import {  Users, UserCheck, UserPlus, Trash2 } from "lucide-react"
+import { Users, UserCheck, UserPlus, Trash2 } from "lucide-react"
 import { useQuery } from "@tanstack/react-query"
 import axios from "axios"
+import UserIcon from "../../../public/assets/icons/user"
+import NewUser from "../../../public/assets/icons/newUser"
+import Delete from "../../../public/assets/icons/delete"
 
 interface MetricData {
   totalUsers: { count: number; change: number; changeFromLastMonth: number }
@@ -25,7 +28,7 @@ export function MetricsCards() {
   // }, [])
   const token = localStorage.getItem("token")
 
-  const { data:metrics, error, isLoading } = useQuery({
+  const { data: metrics, error, isLoading } = useQuery({
     queryKey: ["dashboardMetrics"],
     queryFn: async () => {
       const res = await axios.get(`${baseUrl}/admin/dashboard/stats`, {
@@ -92,7 +95,7 @@ export function MetricsCards() {
         value: metrics.totalUsers?.toLocaleString(),
         change: metrics.totalUsersChangePercent,
         changeText: `+${metrics.totalUsersChangeCount} from last month`,
-        icon: Users,
+        icon: <UserIcon />, // custom svg
         positive: metrics.totalUsersChangePercent >= 0,
       },
       {
@@ -100,7 +103,7 @@ export function MetricsCards() {
         value: metrics.activeUsers?.toLocaleString(),
         change: metrics.activeUsersChangePercent,
         changeText: `+${metrics.activeUsersChangeCount} from last month`,
-        icon: UserCheck,
+        icon: <UserIcon />, // same here, no need to check again
         positive: metrics.activeUsersChangePercent >= 0,
       },
       {
@@ -108,7 +111,7 @@ export function MetricsCards() {
         value: metrics.newUsers?.toLocaleString(),
         change: metrics.newUsersChangePercent,
         changeText: `+${metrics.newUsersChangeCount} from last month`,
-        icon: UserPlus,
+        icon: <NewUser />,
         positive: metrics.newUsersChangePercent >= 0,
       },
       {
@@ -116,11 +119,12 @@ export function MetricsCards() {
         value: metrics.deletedAccounts?.toLocaleString(),
         change: metrics.deletedAccountsChangePercent,
         changeText: `+${metrics.deletedAccountsChangeCount} from last month`,
-        icon: Trash2,
+        icon: <Delete />,
         positive: false,
       },
     ]
   : []
+
 
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
@@ -129,10 +133,10 @@ export function MetricsCards() {
           <CardContent className="px-6">
             <div className="flex items-center justify-between mb-4">
               <div className="p-2 bg-[#6B77E126] rounded-lg">
-                <card.icon className="w-5 h-5 text-black" />
+                {card.icon}
               </div>
               <div
-                className={`flex items-center gap-1 text-4 font-medium font-Geist ${card.positive ? "text-[#059669]" : "text-red-600"
+                className={`flex items-center gap-1 text-4 font-medium font-geist ${card.positive ? "text-[#059669]" : "text-red-600"
                   }`}
               >
                 {card.positive ? <svg width="10" height="12" viewBox="0 0 10 12" fill="none" xmlns="http://www.w3.org/2000/svg">

@@ -53,18 +53,15 @@ export function FeedbackInterface() {
   const [articleToDelete, setArticleToDelete] = useState<KnowledgeBaseArticle | null>(null)
   const [isDeleting, setIsDeleting] = useState(false)
 
-  const feedbacksPerPage = 4
-  const totalPages = Math.ceil(totalFeedbacks / feedbacksPerPage)
-  const startIndex = (currentPage - 1) * feedbacksPerPage + 1
-  const endIndex = Math.min(currentPage * feedbacksPerPage, totalFeedbacks)
+
 
   const token = localStorage.getItem("token")
 
-  const timeframeOptions = [
-    { value: "Recent", label: "Recent" },
-    { value: "This Week", label: "This Week" },
-    { value: "This Month", label: "This Month" },
-  ]
+  // const timeframeOptions = [
+  //   { value: "Recent", label: "Recent" },
+  //   { value: "This Week", label: "This Week" },
+  //   { value: "This Month", label: "This Month" },
+  // ]
 
   useEffect(() => {
     fetch("/api/feedback/knowledge-base")
@@ -79,93 +76,37 @@ export function FeedbackInterface() {
         ])
       })
 
-    fetchUserFeedbacks()
+    // fetchUserFeedbacks()
   }, [currentPage, timeframeFilter])
 
-  const fetchUserFeedbacks = () => {
-    fetch(`/api/feedback/user-feedback?page=${currentPage}&limit=${feedbacksPerPage}&timeframe=${timeframeFilter}`)
-      .then((res) => res.json())
-      .then((data) => {
-        setUserFeedbacks(data.feedbacks)
-        setTotalFeedbacks(data.total)
-      })
-      .catch(() => {
-        const allFeedbacks = [
-          {
-            id: "1",
-            user: { name: "Emma Wilson", avatar: "/placeholder.svg?height=40&width=40", feedbackId: "F-1234" },
-            content:
-              "I've been trying to process a payment for my order #45677 for the last 30 minutes but keep getting an error message. This is very frustrating as I need these items urgently. Your payment system seems to be having issues today.",
-            timestamp:
-              timeframeFilter === "Recent"
-                ? "2 hours ago"
-                : timeframeFilter === "This Week"
-                  ? "3 days ago"
-                  : "2 weeks ago",
-          },
-          {
-            id: "2",
-            user: { name: "Alex Johnson", avatar: "/placeholder.svg?height=40&width=40", feedbackId: "F-1233" },
-            content:
-              "I followed the password reset instructions but still can't access my account. I've tried multiple browsers and devices but nothing works. I need to place an order today and this is preventing me from doing so. Can someone please help me regain access?",
-            timestamp:
-              timeframeFilter === "Recent"
-                ? "5 hours ago"
-                : timeframeFilter === "This Week"
-                  ? "5 days ago"
-                  : "3 weeks ago",
-          },
-          {
-            id: "3",
-            user: { name: "James Peterson", avatar: "/placeholder.svg?height=40&width=40", feedbackId: "F-1232" },
-            content:
-              "I received my order #45672 today but one item is missing. I paid for 3 items but only received 2. This isn't the first time this has happened with my orders. Please resolve this issue as soon as possible.",
-            timestamp:
-              timeframeFilter === "Recent"
-                ? "1 day ago"
-                : timeframeFilter === "This Week"
-                  ? "6 days ago"
-                  : "1 month ago",
-          },
-          {
-            id: "4",
-            user: { name: "Sarah Miller", avatar: "/placeholder.svg?height=40&width=40", feedbackId: "F-1231" },
-            content:
-              "The new app update is fantastic! The interface is much cleaner and easier to navigate. I especially love the new meditation tracking feature. Keep up the great work!",
-            timestamp:
-              timeframeFilter === "Recent"
-                ? "2 days ago"
-                : timeframeFilter === "This Week"
-                  ? "1 week ago"
-                  : "1 month ago",
-          },
-          {
-            id: "5",
-            user: { name: "Michael Chen", avatar: "/placeholder.svg?height=40&width=40", feedbackId: "F-1230" },
-            content:
-              "I'm having trouble syncing my data across devices. My progress on mobile doesn't show up on desktop and vice versa. This is quite inconvenient as I use both regularly.",
-            timestamp:
-              timeframeFilter === "Recent"
-                ? "3 days ago"
-                : timeframeFilter === "This Week"
-                  ? "1 week ago"
-                  : "1 month ago",
-          },
-        ]
 
-        let filteredFeedbacks = allFeedbacks
-        if (timeframeFilter === "This Week") {
-          filteredFeedbacks = allFeedbacks.slice(0, 4)
-        } else if (timeframeFilter === "This Month") {
-          filteredFeedbacks = allFeedbacks
-        }
-
-        const startIdx = (currentPage - 1) * feedbacksPerPage
-        const endIdx = startIdx + feedbacksPerPage
-        setUserFeedbacks(filteredFeedbacks.slice(startIdx, endIdx))
-        setTotalFeedbacks(filteredFeedbacks.length)
+  //Fetching knowledge base
+  const { data: Articles, error:articleError, isLoading:articleLoading } = useQuery({
+    queryKey: ["Articles"],
+    queryFn: async () => {
+      const res = await axios.get(`${baseUrl}/admin/articles`, {
+        headers: { Authorization: `Bearer ${token}` },
       })
-  }
+      return res.data
+    },
+  })
+
+  console.log("response from all feedbacks: ", Articles)
+
+
+  //Fetching Feedbacked
+  const { data: allFeedbacks, error:feedbackError, isLoading:feedbackLoading } = useQuery({
+    queryKey: ["allFeedbacks"],
+    queryFn: async () => {
+      const res = await axios.get(`${baseUrl}/admin/feedbacks?page=${currentPage}&limit=${feedbacksPerPage}`, {
+        headers: { Authorization: `Bearer ${token}` },
+      })
+      return res.data
+    },
+  })
+
+  console.log("response from all feedbacks: ", allFeedbacks)
+
 
   const handleTimeframeChange = (newTimeframe: string) => {
     setTimeframeFilter(newTimeframe)
@@ -312,6 +253,18 @@ export function FeedbackInterface() {
     setArticleToDelete(null)
   }
 
+
+
+
+  const feedbacksPerPage = 4
+  const totalPages = Math.ceil(allFeedbacks / feedbacksPerPage)
+  const startIndex = (currentPage - 1) * feedbacksPerPage + 1
+  const endIndex = Math.min(currentPage * feedbacksPerPage, allFeedbacks?.total)
+  console.log("total page: ", totalPages)
+  console.log("feedbacks per page: ", feedbacksPerPage)
+  console.log("end index: ", endIndex)
+  console.log("current page: ", currentPage)
+
   return (
     <div className="flex-1 flex flex-col">
       <div className="bg-background border-b border-gray-200 px-6 py-4">
@@ -394,100 +347,85 @@ export function FeedbackInterface() {
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 ">
           <div className="lg:col-span-2 bg-background rounded-lg border p-6 shadow-[0px_0px_0px_0px_#00000000,0px_0px_0px_0px_#00000000,0px_1px_2px_0px_#0000000D]">
-            <div className="flex items-center justify-between mb-6">
+            <div className="flex items-center justify-between  border-t border-x py-5 px-4 rounded-t-lg">
               <div className="flex items-center gap-4">
                 <h2 className="text-lg font-semibold ">User Feedback</h2>
-                <Badge variant="secondary" className="bg-blue-100 text-blue-800">
-                  {totalFeedbacks} total
+                <Badge variant="secondary" className="bg-[#EEF2FF] text-[#4F46E5] py-0.5 px-2">
+                  {allFeedbacks?.total || 0} total
                 </Badge>
               </div>
-              <div className="flex items-center gap-2">
-                <span className="text-sm text-foreground/60">Sort by:</span>
-                <DropdownMenu>
-                  <DropdownMenuTrigger asChild>
-                    <Button variant="outline" size="sm">
-                      {timeframeFilter}
-                      <ChevronDown className="w-4 h-4 ml-2" />
-                    </Button>
-                  </DropdownMenuTrigger>
-                  <DropdownMenuContent align="end">
-                    {timeframeOptions.map((option) => (
-                      <DropdownMenuItem
-                        key={option.value}
-                        onClick={() => handleTimeframeChange(option.value)}
-                        className={timeframeFilter === option.value ? "bg-blue-50 text-blue-600" : ""}
-                      >
-                        {option.label}
-                      </DropdownMenuItem>
-                    ))}
-                  </DropdownMenuContent>
-                </DropdownMenu>
-              </div>
             </div>
-
-            <div className="space-y-4">
-              {userFeedbacks.map((feedback) => (
-                <div key={feedback.id} className="border border-gray-200 rounded-lg p-4">
-                  <div className="flex items-start gap-3">
-                    <Avatar className="w-10 h-10">
-                      <AvatarImage src={feedback.user.avatar || "/placeholder.svg"} />
-                      <AvatarFallback>
-                        {feedback.user.name
-                          .split(" ")
-                          .map((n) => n[0])
-                          .join("")}
-                      </AvatarFallback>
-                    </Avatar>
-                    <div className="flex-1">
-                      <div className="flex items-center justify-between mb-2">
-                        <div>
-                          <h4 className="font-medium ">{feedback.user.name}</h4>
-                          <p className="text-sm text-foreground/60">Feedback #{feedback.user.feedbackId}</p>
+            <div className=" border rounded-b-lg">
+              <div className="space-y-4">
+                {allFeedbacks?.feedbacks?.length === 0 ? (
+                  <p>No feedbacks available.</p>
+                ) : (
+                  allFeedbacks?.feedbacks?.map((feedback: any) => (
+                    <div key={feedback.id} className="border-b border-gray-200 rounded-x-lg rounded-t-lg p-4">
+                      <div className="flex items-start gap-4">
+                        <Avatar className="w-10 h-10">
+                          <AvatarImage src="/placeholder.svg" />
+                          <AvatarFallback>
+                            {feedback.userName
+                              .split(" ")
+                              .map((n: string) => n[0])
+                              .join("")}
+                          </AvatarFallback>
+                        </Avatar>
+                        <div className="flex-1">
+                          <div className="mb-3">
+                            <div className="flex  justify-between mb-2" >
+                              <h4 className="font-medium">{feedback.userName}</h4>
+                            <span className="text-sm text-foreground/60">{feedback.createdAgo}</span>
+                            </div>
+                              <p className="text-sm text-foreground/60">Feedback #{feedback.id}</p>
+                          </div>
+                          <p className="text-sm leading-relaxed pb-9today">{feedback.text}</p>
                         </div>
-                        <span className="text-sm text-foreground/60">{feedback.timestamp}</span>
                       </div>
-                      <p className=" text-sm leading-relaxed">{feedback.content}</p>
                     </div>
-                  </div>
-                </div>
-              ))}
-            </div>
+                  ))
+                )}
+              </div>
 
-            <div className="flex items-center justify-between mt-6 pt-4 border-t border-gray-200">
-              <p className="text-sm text-foreground/60">
-                Showing  <span className="text-foreground/100"> {endIndex} </span> of <span className="text-foreground/100">{totalFeedbacks}</span> feedbacks
-              </p>
-              <div className="flex items-center gap-2">
-                <Button
-                  variant="outline"
-                  size="sm"
-                  onClick={handlePreviousPage}
-                  disabled={currentPage === 1 || totalFeedbacks <= 4}
-                >
-                  Previous
-                </Button>
-                {Array.from({ length: Math.min(3, totalPages) }, (_, i) => i + 1).map((page) => (
+              <div className="flex items-center justify-between pt-9 pb-7 mx-[1.375rem] ">
+                <p className="text-sm text-foreground/60">
+                  Showing <span className="text-foreground/100">{endIndex}</span> of{" "}
+                  <span className="text-foreground/100">{allFeedbacks?.total || 0}</span> feedbacks
+                </p>
+                <div className="flex items-center gap-2">
                   <Button
-                    key={page}
                     variant="outline"
                     size="sm"
-                    onClick={() => handlePageClick(page)}
-                    className={currentPage === page ? "bg-gray-100 text-foreground" : ""}
+                    onClick={handlePreviousPage}
+                    disabled={currentPage === 1 || (allFeedbacks?.total || 0) <= feedbacksPerPage}
                   >
-                    {page}
+                    Previous
                   </Button>
-                ))}
-                <Button
-                  variant="outline"
-                  size="sm"
-                  onClick={handleNextPage}
-                  disabled={currentPage === totalPages || totalFeedbacks <= 4}
-                >
-                  Next
-                </Button>
+                  {Array.from({ length: Math.min(3, totalPages) }, (_, i) => i + 1).map((page) => (
+                    <Button
+                      key={page}
+                      variant="outline"
+                      size="sm"
+                      onClick={() => handlePageClick(page)}
+                      className={currentPage === page ? "bg-gray-100 text-foreground" : ""}
+                    >
+                      {page}
+                    </Button>
+                  ))}
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={handleNextPage}
+                    disabled={currentPage === totalPages || (allFeedbacks?.total || 0) <= feedbacksPerPage}
+                  >
+                    Next
+                  </Button>
+                </div>
               </div>
             </div>
           </div>
+
 
           <div className="bg-background rounded-lg border p-6 shadow-[0px_1px_2px_0px_#0000000D,0px_0px_0px_0px_#00000000,0px_0px_0px_0px_#00000000] max-h-122">
             <div className="flex items-center justify-between mb-6 mx-auto">
